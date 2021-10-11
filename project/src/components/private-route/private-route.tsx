@@ -17,7 +17,7 @@ function PrivateRoute(props: PrivateRouteProps): JSX.Element {
       render={() => (
         authorizationStatus === AuthorizationStatus.Auth
           ? render()
-          : <Redirect to={AppRoute.Login} />
+          : <Redirect to={AppRoute.LOGIN} />
       )}
     />
   );

@@ -1,34 +1,24 @@
-import {MouseEvent} from 'react';
 import {Link, useHistory} from 'react-router-dom';
-import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
 import {OffersType} from '../../types/offers';
+import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
 
-type CardProps = {
-  offer: OffersType;
-  onHover: (offer: OffersType) => void;
+type FavoritesCardProps = {
+  favoriteOffer: OffersType;
 }
 
-function Card({offer, onHover}:CardProps):JSX.Element {
-  const {isPremium, previewImage, title, price, isFavorite, rating, type, id} = offer;
+function FavoritesCard({favoriteOffer}: FavoritesCardProps):JSX.Element {
+  const {isPremium, previewImage, title, price, isFavorite, rating, type, id} = favoriteOffer;
   const history = useHistory();
-
-  const handleHover = (evt: MouseEvent<HTMLElement>) => {
-    evt.preventDefault();
-    onHover(offer);
-  };
 
   const handleClick = () => {
     history.push(
       `${AppRoute.OFFER}/${id}`,
-      {state: offer} as {state: OffersType},
+      {state: favoriteOffer} as {state: OffersType},
     );
   };
 
   return (
-    <article className="cities__place-card place-card"
-      onMouseOver={handleHover}
-      onClick={handleClick}
-    >
+    <article className="favorites__card place-card" onClick={handleClick}>
       {
         isPremium
           ?
@@ -37,12 +27,12 @@ function Card({offer, onHover}:CardProps):JSX.Element {
           </div>
           : ''
       }
-      <div className="cities__image-wrapper place-card__image-wrapper">
+      <div className="favorites__image-wrapper place-card__image-wrapper">
         <Link to={'#'}>
-          <img className="place-card__image" src={previewImage} width="260" height="200" alt={title} />
+          <img className="place-card__image" src={previewImage} width="150" height="110" alt={title} />
         </Link>
       </div>
-      <div className="place-card__info">
+      <div className="favorites__card-info place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
@@ -70,4 +60,4 @@ function Card({offer, onHover}:CardProps):JSX.Element {
   );
 }
 
-export default Card;
+export default FavoritesCard;
