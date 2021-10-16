@@ -1,7 +1,6 @@
 import {Link, useHistory} from 'react-router-dom';
 import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
-import {OffersType} from '../../types/offers';
-import {ReviewsType} from '../../types/reviews';
+import {OffersType, ReviewsType} from '../../types/types';
 import ReviewForm from '../review-form/review-form';
 
 type PropertyScreenProps = {

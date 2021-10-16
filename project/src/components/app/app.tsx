@@ -7,8 +7,7 @@ import PropertyScreen from '../property/property';
 import Screen404 from '../screen-404/screen-404';
 import PrivateRoute from '../private-route/private-route';
 import {AppRoute, AuthorizationStatus} from '../../const/const';
-import {OffersType} from '../../types/offers';
-import {ReviewsType} from '../../types/reviews';
+import {OffersType, ReviewsType} from '../../types/types';
 
 type AppScreenProps = {
   cardsNumber: number;

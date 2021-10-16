@@ -1,7 +1,9 @@
+import {useState} from 'react';
 import OffersList from '../offers-list/offers-list';
 import {Link} from 'react-router-dom';
 import {AppRoute, cities} from '../../const/const';
-import {OffersType} from '../../types/offers';
+import {OffersType} from '../../types/types';
+import Map from '../map/map';
 
 type MainScreenProps = {
   cardsNumber: number;
@@ -9,6 +11,15 @@ type MainScreenProps = {
 }
 
 function MainScreen({cardsNumber, offers}:MainScreenProps):JSX.Element {
+  const points = offers.map((offer) => ({location: offer.location, id: offer.id}));
+  const city = offers[0].city;
+  const [selectedPoint, setSelectedPoint] = useState<number | undefined>(
+    undefined,
+  );
+
+  const onListItemHover = (id: number) => {
+    setSelectedPoint(id);
+  };
 
   return (
     <div className="page page--gray page--main">
@@ -46,10 +57,10 @@ function MainScreen({cardsNumber, offers}:MainScreenProps):JSX.Element {
           <section className="locations container">
             <ul className="locations__list tabs__list">
               {
-                cities.map((city) => (
-                  <li key={city} className="locations__item">
+                cities.map((menuCity) => (
+                  <li key={menuCity} className="locations__item">
                     <a className="locations__item-link tabs__item" href="/">
-                      <span>{city}</span>
+                      <span>{menuCity}</span>
                     </a>
                   </li>
                 ))
@@ -78,11 +89,13 @@ function MainScreen({cardsNumber, offers}:MainScreenProps):JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <OffersList offers={offers} cardsNumber={cardsNumber}/>
+                <OffersList offers={offers} cardsNumber={cardsNumber} onListItemHover={onListItemHover}/>
               </div>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map">
+                <Map city={city} points={points} selectedPoint={selectedPoint} />
+              </section>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import {Link, useHistory} from 'react-router-dom';
-import {OffersType} from '../../types/offers';
+import {OffersType} from '../../types/types';
 import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
 
 type FavoritesCardProps = {
