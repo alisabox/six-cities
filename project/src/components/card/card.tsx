@@ -1,11 +1,11 @@
 import {MouseEvent} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
-import {OffersType} from '../../types/offers';
+import {OffersType} from '../../types/types';
 
 type CardProps = {
   offer: OffersType;
-  onHover: (offer: OffersType) => void;
+  onHover: (id: number) => void;
 }
 
 function Card({offer, onHover}:CardProps):JSX.Element {
@@ -14,7 +14,7 @@ function Card({offer, onHover}:CardProps):JSX.Element {
 
   const handleHover = (evt: MouseEvent<HTMLElement>) => {
     evt.preventDefault();
-    onHover(offer);
+    onHover(offer.id);
   };
 
   const handleClick = () => {

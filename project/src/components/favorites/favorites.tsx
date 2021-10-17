@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 import {AppRoute, cities} from '../../const/const';
-import {OffersType} from '../../types/offers';
+import {OffersType} from '../../types/types';
 import FavoritesCard from '../favotites-card/favorites-card';
 
 type FavoritesScreenProps = {
