@@ -13,7 +13,7 @@ type MapPointsType = {
 type MapProps = {
   city: CityType;
   points: MapPointsType[];
-  selectedPoint: number | undefined;
+  selectedPoint?: number | undefined;
 };
 
 const defaultCustomIcon = new Icon({
