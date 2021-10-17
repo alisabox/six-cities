@@ -1,33 +1,28 @@
 import {MouseEvent} from 'react';
-import {Link, useHistory} from 'react-router-dom';
-import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
+import {Link} from 'react-router-dom';
+import {AppRoute, RoomTypes, MAX_RATING, Screen, BasicCardImageSize, FavoriteCardImageSize} from '../../const/const';
 import {OffersType} from '../../types/types';
 
 type CardProps = {
   offer: OffersType;
-  onHover: (id: number) => void;
+  onHover?: (id: number) => void;
+  screen?: Screen;
 }
 
-function Card({offer, onHover}:CardProps):JSX.Element {
+function Card({offer, onHover, screen}:CardProps):JSX.Element {
   const {isPremium, previewImage, title, price, isFavorite, rating, type, id} = offer;
-  const history = useHistory();
 
   const handleHover = (evt: MouseEvent<HTMLElement>) => {
+    if (screen !== Screen.Main) {
+      return;
+    }
     evt.preventDefault();
-    onHover(offer.id);
-  };
-
-  const handleClick = () => {
-    history.push(
-      `${AppRoute.OFFER}/${id}`,
-      {state: offer} as {state: OffersType},
-    );
+    onHover && onHover(offer.id);
   };
 
   return (
-    <article className="cities__place-card place-card"
+    <article className={`${screen === Screen.Main ? 'cities__place-card' : `${screen}__card`} place-card`}
       onMouseOver={handleHover}
-      onClick={handleClick}
     >
       {
         isPremium
@@ -37,12 +32,16 @@ function Card({offer, onHover}:CardProps):JSX.Element {
           </div>
           : ''
       }
-      <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={'#'}>
-          <img className="place-card__image" src={previewImage} width="260" height="200" alt={title} />
+      <div className={`${screen}__image-wrapper place-card__image-wrapper`}>
+        <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer}}>
+          <img className="place-card__image" src={previewImage}
+            width={screen === Screen.Favorite ? FavoriteCardImageSize.WIDTH : BasicCardImageSize.WIDTH}
+            height={screen === Screen.Favorite ? FavoriteCardImageSize.HEIGHT : BasicCardImageSize.HEIGHT}
+            alt={title}
+          />
         </Link>
       </div>
-      <div className="place-card__info">
+      <div className={`${screen === Screen.Favorite ? 'favorites__card-info' : ''} place-card__info`}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
@@ -62,7 +61,7 @@ function Card({offer, onHover}:CardProps):JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={'#'}>{title}</Link>
+          <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer}}>{title}</Link>
         </h2>
         <p className="place-card__type">{RoomTypes[type.toUpperCase()]}</p>
       </div>

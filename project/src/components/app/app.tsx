@@ -40,7 +40,7 @@ function App(props: AppScreenProps): JSX.Element {
         >
         </PrivateRoute>
         <Route path={AppRoute.OFFER}>
-          <PropertyScreen reviews={reviews}/>
+          <PropertyScreen reviews={reviews} offers={offers}/>
         </Route>
         <Route>
           <Screen404 />

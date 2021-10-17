@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import OffersList from '../offers-list/offers-list';
 import {Link} from 'react-router-dom';
-import {AppRoute, cities} from '../../const/const';
+import {AppRoute, cities, Screen} from '../../const/const';
 import {OffersType} from '../../types/types';
 import Map from '../map/map';
 
@@ -89,7 +89,7 @@ function MainScreen({cardsNumber, offers}:MainScreenProps):JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <OffersList offers={offers} cardsNumber={cardsNumber} onListItemHover={onListItemHover}/>
+                <OffersList offers={offers} cardsNumber={cardsNumber} onListItemHover={onListItemHover} screen={Screen.Main}/>
               </div>
             </section>
             <div className="cities__right-section">

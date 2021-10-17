@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom';
-import {AppRoute, cities} from '../../const/const';
+import {AppRoute, cities, Screen} from '../../const/const';
 import {OffersType} from '../../types/types';
-import FavoritesCard from '../favotites-card/favorites-card';
+import Card from '../card/card';
 
 type FavoritesScreenProps = {
   favoriteOffers: OffersType[];
@@ -67,7 +67,7 @@ function FavoritesScreen({favoriteOffers}:FavoritesScreenProps):JSX.Element {
                     </div>
                     <div className="favorites__places">
                       {
-                        entry[1].map((favoriteOffer) => <FavoritesCard key={favoriteOffer.id} favoriteOffer={favoriteOffer}/>)
+                        entry[1].map((favoriteOffer) => <Card key={favoriteOffer.id} offer={favoriteOffer} screen={Screen.Favorite}/>)
                       }
                     </div>
                   </li>
