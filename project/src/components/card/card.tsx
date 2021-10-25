@@ -5,24 +5,45 @@ import {OffersType} from '../../types/types';
 
 type CardProps = {
   offer: OffersType;
-  onHover?: (id: number) => void;
-  screen?: Screen;
+  onHover?: (id: number | undefined) => void;
+  isMainScreen?: boolean;
+  isFavoriteScreen?: boolean;
+  isPropertyScreen?: boolean;
 }
 
-function Card({offer, onHover, screen}:CardProps):JSX.Element {
+function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}:CardProps):JSX.Element {
   const {isPremium, previewImage, title, price, isFavorite, rating, type, id} = offer;
 
   const handleHover = (evt: MouseEvent<HTMLElement>) => {
-    if (screen !== Screen.Main) {
+    if (!isMainScreen) {
       return;
     }
     evt.preventDefault();
-    onHover && onHover(offer.id);
+    if (onHover) {
+      onHover(offer.id);
+    }
+  };
+
+  const handleBlur = () => {
+    if (onHover) {
+      onHover(undefined);
+    }
+  };
+
+  const screenClass = () => {
+    if (isMainScreen) {
+      return Screen.MAIN;
+    } else if (isFavoriteScreen) {
+      return Screen.FAVORITE;
+    } else if (isPropertyScreen) {
+      return Screen.PROPERTY;
+    }
+    return Screen.MAIN;
   };
 
   return (
-    <article className={`${screen === Screen.Main ? 'cities__place-card' : `${screen}__card`} place-card`}
-      onMouseOver={handleHover}
+    <article className={`${isMainScreen ? 'cities__place-card' : `${screenClass()}__card`} place-card`}
+      onMouseOver={handleHover} onMouseOut={handleBlur}
     >
       {
         isPremium
@@ -32,16 +53,16 @@ function Card({offer, onHover, screen}:CardProps):JSX.Element {
           </div>
           : ''
       }
-      <div className={`${screen}__image-wrapper place-card__image-wrapper`}>
+      <div className={`${screenClass()}__image-wrapper place-card__image-wrapper`}>
         <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer}}>
           <img className="place-card__image" src={previewImage}
-            width={screen === Screen.Favorite ? FavoriteCardImageSize.WIDTH : BasicCardImageSize.WIDTH}
-            height={screen === Screen.Favorite ? FavoriteCardImageSize.HEIGHT : BasicCardImageSize.HEIGHT}
+            width={isFavoriteScreen ? FavoriteCardImageSize.WIDTH : BasicCardImageSize.WIDTH}
+            height={isFavoriteScreen ? FavoriteCardImageSize.HEIGHT : BasicCardImageSize.HEIGHT}
             alt={title}
           />
         </Link>
       </div>
-      <div className={`${screen === Screen.Favorite ? 'favorites__card-info' : ''} place-card__info`}>
+      <div className={`${isFavoriteScreen ? 'favorites__card-info' : ''} place-card__info`}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>

@@ -1,24 +1,42 @@
-import {useState} from 'react';
-import OffersList from '../offers-list/offers-list';
+import {MouseEvent} from 'react';
+import {Dispatch,bindActionCreators} from 'redux';
+import { connect,ConnectedProps } from 'react-redux';
 import {Link} from 'react-router-dom';
-import {AppRoute, cities, Screen} from '../../const/const';
-import {OffersType} from '../../types/types';
-import Map from '../map/map';
+import { getCity } from '../../store/action';
+import {AppRoute, cities} from '../../const/const';
+import {Actions, OffersType, State} from '../../types/types';
+import OffersList from '../offers-list/offers-list';
+import MainScreenEmpty from '../main-empty/main-empty';
+
 
 type MainScreenProps = {
   cardsNumber: number;
   offers: OffersType[];
 }
 
-function MainScreen({cardsNumber, offers}:MainScreenProps):JSX.Element {
-  const points = offers.map((offer) => ({location: offer.location, id: offer.id}));
-  const city = offers[0].city;
-  const [selectedPoint, setSelectedPoint] = useState<number | undefined>(
-    undefined,
-  );
+const mapStateToProps = ({selectedCity}: State) => ({
+  selectedCity,
+});
 
-  const onListItemHover = (id: number) => {
-    setSelectedPoint(id);
+const mapDispatchToProps = (dispatch: Dispatch<Actions>) => bindActionCreators({
+  onCityChange: getCity,
+}, dispatch);
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & MainScreenProps;
+
+
+function MainScreen({cardsNumber, offers, selectedCity, onCityChange}:ConnectedComponentProps):JSX.Element {
+  const offersInSelectedCity = offers.filter((offer) =>  offer.city.name === selectedCity);
+
+  const hadleCityClick = (evt: MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    const input = evt.target as HTMLElement;
+    if (input.textContent) {
+      onCityChange(input.textContent);
+    }
   };
 
   return (
@@ -59,7 +77,11 @@ function MainScreen({cardsNumber, offers}:MainScreenProps):JSX.Element {
               {
                 cities.map((menuCity) => (
                   <li key={menuCity} className="locations__item">
-                    <a className="locations__item-link tabs__item" href="/">
+                    <a
+                      className={`locations__item-link tabs__item ${menuCity === selectedCity ? 'tabs__item--active' : ''}`}
+                      href="/"
+                      onClick={hadleCityClick}
+                    >
                       <span>{menuCity}</span>
                     </a>
                   </li>
@@ -68,40 +90,15 @@ function MainScreen({cardsNumber, offers}:MainScreenProps):JSX.Element {
             </ul>
           </section>
         </div>
-        <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">312 places to stay in Amsterdam</b>
-              <form className="places__sorting" action="/" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex={0}>
-                  Popular
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use xlinkHref="#icon-arrow-select"></use>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom">
-                  <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                  <li className="places__option" tabIndex={0}>Price: low to high</li>
-                  <li className="places__option" tabIndex={0}>Price: high to low</li>
-                  <li className="places__option" tabIndex={0}>Top rated first</li>
-                </ul>
-              </form>
-              <div className="cities__places-list places__list tabs__content">
-                <OffersList offers={offers} cardsNumber={cardsNumber} onListItemHover={onListItemHover} screen={Screen.Main}/>
-              </div>
-            </section>
-            <div className="cities__right-section">
-              <section className="cities__map map">
-                <Map city={city} points={points} selectedPoint={selectedPoint} />
-              </section>
-            </div>
-          </div>
-        </div>
+        {
+          offersInSelectedCity.length === 0
+            ? <MainScreenEmpty selectedCity={selectedCity}/>
+            : <OffersList selectedCity={selectedCity} offers={offersInSelectedCity} cardsNumber={cardsNumber} />
+        }
       </main>
     </div>
   );
 }
 
-export default MainScreen;
+export {MainScreen};
+export default connector(MainScreen);
