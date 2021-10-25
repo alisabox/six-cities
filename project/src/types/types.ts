@@ -42,3 +42,24 @@ export type ReviewsType = {
   rating: number;
   user: UserType;
 }
+
+export type State = {
+  selectedCity: string;
+  offers: OffersType[];
+}
+
+export enum ActionType {
+  GetCityAction = 'MAIN_GET_CITY',
+  GetOffersAction = 'MAIN_GET_OFFERS',
+}
+
+export type GetCityAction = {
+  type: ActionType.GetCityAction;
+  payload: string;
+}
+
+export type GetOffersAction = {
+  type: ActionType.GetOffersAction;
+}
+
+export type Actions = GetCityAction | GetOffersAction;
