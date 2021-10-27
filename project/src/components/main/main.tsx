@@ -1,5 +1,5 @@
 import {MouseEvent} from 'react';
-import {Dispatch,bindActionCreators} from 'redux';
+import {Dispatch,bindActionCreators, AnyAction} from 'redux';
 import { connect,ConnectedProps } from 'react-redux';
 import {Link} from 'react-router-dom';
 import { getCity } from '../../store/action';
@@ -18,7 +18,7 @@ const mapStateToProps = ({selectedCity}: State) => ({
   selectedCity,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction | Actions>) => bindActionCreators({
   onCityChange: getCity,
 }, dispatch);
 
@@ -31,7 +31,7 @@ type ConnectedComponentProps = PropsFromRedux & MainScreenProps;
 function MainScreen({cardsNumber, offers, selectedCity, onCityChange}:ConnectedComponentProps):JSX.Element {
   const offersInSelectedCity = offers.filter((offer) =>  offer.city.name === selectedCity);
 
-  const hadleCityClick = (evt: MouseEvent<HTMLElement>) => {
+  const handleCityClick = (evt: MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     const input = evt.target as HTMLElement;
     if (input.textContent) {
@@ -80,7 +80,7 @@ function MainScreen({cardsNumber, offers, selectedCity, onCityChange}:ConnectedC
                     <a
                       className={`locations__item-link tabs__item ${menuCity === selectedCity ? 'tabs__item--active' : ''}`}
                       href="/"
-                      onClick={hadleCityClick}
+                      onClick={handleCityClick}
                     >
                       <span>{menuCity}</span>
                     </a>

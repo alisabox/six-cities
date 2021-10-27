@@ -5,7 +5,7 @@ import {OffersType} from '../../types/types';
 
 type CardProps = {
   offer: OffersType;
-  onHover?: (id: number | undefined) => void;
+  onHover?: (id?: number) => void;
   isMainScreen?: boolean;
   isFavoriteScreen?: boolean;
   isPropertyScreen?: boolean;
@@ -31,14 +31,16 @@ function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}
   };
 
   const screenClass = () => {
-    if (isMainScreen) {
-      return Screen.MAIN;
-    } else if (isFavoriteScreen) {
-      return Screen.FAVORITE;
-    } else if (isPropertyScreen) {
-      return Screen.PROPERTY;
+    switch(true) {
+      case isMainScreen:
+        return Screen.MAIN;
+      case isFavoriteScreen:
+        return Screen.FAVORITE;
+      case isPropertyScreen:
+        return Screen.PROPERTY;
+      default:
+        return Screen.MAIN;
     }
-    return Screen.MAIN;
   };
 
   return (

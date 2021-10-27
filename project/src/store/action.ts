@@ -1,6 +1,11 @@
-import { ActionType } from '../types/types';
+import { ActionType, GetCityAction, GetOffersAction, OffersType } from '../types/types';
 
-export const getCity = (city: string) => ({
+export const getCity = (city: string): GetCityAction => ({
   type: ActionType.GetCityAction,
   payload: city,
-} as const);
+});
+
+export const getOffers = (offers: OffersType[]): GetOffersAction => ({
+  type: ActionType.GetOffersAction,
+  payload: offers,
+});

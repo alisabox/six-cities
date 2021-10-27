@@ -12,7 +12,7 @@ export const reducer = (state: State = initialState, action: Actions): State => 
     case ActionType.GetCityAction:
       return {...state, selectedCity: action.payload};
     case ActionType.GetOffersAction:
-      return {...state, selectedCity: action.type};
+      return {...state, offers: action.payload};
     default:
       return state;
   }
