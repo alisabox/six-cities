@@ -60,6 +60,7 @@ export type GetCityAction = {
 
 export type GetOffersAction = {
   type: ActionType.GetOffersAction;
+  payload: OffersType[];
 }
 
 export type Actions = GetCityAction | GetOffersAction;
