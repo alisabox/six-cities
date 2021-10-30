@@ -7,11 +7,10 @@ import { sortOffers } from '../../const/const';
 
 type OffersProps = {
   selectedCity:  string;
-  cardsNumber: number;
   offers: OffersType[];
 }
 
-function OffersList({selectedCity, cardsNumber, offers}:OffersProps):JSX.Element {
+function OffersList({selectedCity, offers}:OffersProps):JSX.Element {
 
   const listItemHoverHandler = (id?: number) => {
     onListItemHover(id);
@@ -32,6 +31,10 @@ function OffersList({selectedCity, cardsNumber, offers}:OffersProps):JSX.Element
     setSortedOffers(offers);
   }, [offers]);
 
+  useEffect(() => {
+    setSelectedPoint(undefined);
+  }, [selectedCity]);
+
   return (
     <div className="cities">
       <div className="cities__places-container container">
@@ -40,7 +43,7 @@ function OffersList({selectedCity, cardsNumber, offers}:OffersProps):JSX.Element
           <b className="places__found">{offers.length === 1 ? '1 place' : `${offers.length} places`} to stay in {selectedCity}</b>
           <SortVariants onSortModeChange={onSortModeChange} selectedCity={selectedCity}/>
           <div className="cities__places-list places__list tabs__content">
-            {sortedOffers.slice(0,cardsNumber).map((offer:OffersType) =>
+            {sortedOffers.slice().map((offer:OffersType) =>
               <Card key={offer.id} offer={offer} onHover={listItemHoverHandler} isMainScreen />,
             )}
           </div>

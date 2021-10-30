@@ -1,28 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import {createAPI} from './services/api';
 import {Provider} from 'react-redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import App from './components/app/app';
-import {offers} from './mocks/offers';
 import {reviews} from './mocks/reviews';
 import {reducer} from './store/reducer';
+import {requireAuthorization} from './store/action';
+import {fetchDataAction, checkAuthAction} from './store/api-actions';
+import {ThunkAppDispatch} from './types/types';
+import {AuthorizationStatus} from './const/const';
 
-const Setting = {
-  CARDS_NUMBER: 5,
-};
+const api = createAPI(
+  () => store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)),
+);
 
 const store = createStore(
   reducer,
-  composeWithDevTools(),
+  composeWithDevTools(
+    applyMiddleware(thunk.withExtraArgument(api)),
+  ),
 );
+
+(store.dispatch as ThunkAppDispatch)(checkAuthAction());
+(store.dispatch as ThunkAppDispatch)(fetchDataAction());
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <App
-        cardsNumber = {Setting.CARDS_NUMBER}
-        offers = {offers}
         reviews = {reviews}
       />
     </Provider>
