@@ -10,7 +10,6 @@ import MainScreenEmpty from '../main-empty/main-empty';
 
 
 type MainScreenProps = {
-  cardsNumber: number;
   offers: OffersType[];
 }
 
@@ -28,7 +27,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & MainScreenProps;
 
 
-function MainScreen({cardsNumber, offers, selectedCity, onCityChange}:ConnectedComponentProps):JSX.Element {
+function MainScreen({offers, selectedCity, onCityChange}:ConnectedComponentProps):JSX.Element {
   const offersInSelectedCity = offers.filter((offer) =>  offer.city.name === selectedCity);
 
   const handleCityClick = (evt: MouseEvent<HTMLElement>) => {
@@ -93,7 +92,7 @@ function MainScreen({cardsNumber, offers, selectedCity, onCityChange}:ConnectedC
         {
           offersInSelectedCity.length === 0
             ? <MainScreenEmpty selectedCity={selectedCity}/>
-            : <OffersList selectedCity={selectedCity} offers={offersInSelectedCity} cardsNumber={cardsNumber} />
+            : <OffersList selectedCity={selectedCity} offers={offersInSelectedCity} />
         }
       </main>
     </div>

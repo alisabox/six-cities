@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { SortMode } from '../../const/const';
 
-const ACTIVE_SORT_CLASS = 'places__option--active';
 
 type SortVariantsProps = {
   onSortModeChange: (sort: string | null) => void;
@@ -9,6 +8,16 @@ type SortVariantsProps = {
 }
 
 function SortVariants({onSortModeChange, selectedCity}: SortVariantsProps):JSX.Element {
+
+  const ACTIVE_SORT_CLASS = 'places__option--active';
+
+  const [selectedSortMode, setSelectedSortMode] = useState({
+    isPopular: true,
+    isPriceUp: false,
+    isPriceDown: false,
+    isTopRated: false,
+  });
+
   const [openList, setOpenList] = useState<boolean>(false);
 
   const handleSortOpen = () => (setOpenList((prevState) =>  !prevState));
@@ -22,16 +31,24 @@ function SortVariants({onSortModeChange, selectedCity}: SortVariantsProps):JSX.E
       return;
     }
     setSelectSort(element.textContent);
-    element.parentElement?.childNodes.forEach((el) => {
-      const child = el as HTMLElement;
-      child.classList.remove(ACTIVE_SORT_CLASS);
+    setSelectedSortMode({
+      isPopular: element.textContent === SortMode.POPULAR,
+      isPriceUp: element.textContent === SortMode.PRICE_UP,
+      isPriceDown: element.textContent === SortMode.PRICE_DOWN,
+      isTopRated: element.textContent === SortMode.TOP_RATED,
     });
-    element.classList.add(ACTIVE_SORT_CLASS);
     onSortModeChange(element.textContent);
   };
 
   useEffect(() => {
     setSelectSort(SortMode.POPULAR);
+    setOpenList(false);
+    setSelectedSortMode({
+      isPopular: true,
+      isPriceUp: false,
+      isPriceDown: false,
+      isTopRated: false,
+    });
   }, [selectedCity]);
 
 
@@ -45,10 +62,10 @@ function SortVariants({onSortModeChange, selectedCity}: SortVariantsProps):JSX.E
         </svg>
       </span>
       <ul onClick={handleSelectSort} className={`places__options places__options--custom ${openList ? 'places__options--opened' : ''}`}>
-        <li className={`places__option ${ACTIVE_SORT_CLASS}`} tabIndex={0}>{SortMode.POPULAR}</li>
-        <li className="places__option" tabIndex={0}>{SortMode.PRICE_UP}</li>
-        <li className="places__option" tabIndex={0}>{SortMode.PRICE_DOWN}</li>
-        <li className="places__option" tabIndex={0}>{SortMode.TOP_RATED}</li>
+        <li className={`places__option ${selectedSortMode.isPopular ? ACTIVE_SORT_CLASS : ''}`} tabIndex={0}>{SortMode.POPULAR}</li>
+        <li className={`places__option ${selectedSortMode.isPriceUp ? ACTIVE_SORT_CLASS : ''}`} tabIndex={0}>{SortMode.PRICE_UP}</li>
+        <li className={`places__option ${selectedSortMode.isPriceDown ? ACTIVE_SORT_CLASS : ''}`} tabIndex={0}>{SortMode.PRICE_DOWN}</li>
+        <li className={`places__option ${selectedSortMode.isTopRated ? ACTIVE_SORT_CLASS : ''}`} tabIndex={0}>{SortMode.TOP_RATED}</li>
       </ul>
     </form>
   );

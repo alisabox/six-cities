@@ -1,10 +1,11 @@
-import { offers } from '../mocks/offers';
 import { State, Actions, ActionType } from '../types/types';
-
+import {adaptToClient, AuthorizationStatus} from '../const/const';
 
 export const initialState: State = {
   selectedCity: 'Paris',
-  offers: offers,
+  offers: [],
+  authorizationStatus: AuthorizationStatus.Unknown,
+  isDataLoaded: false,
 };
 
 export const reducer = (state: State = initialState, action: Actions): State => {
@@ -12,7 +13,11 @@ export const reducer = (state: State = initialState, action: Actions): State => 
     case ActionType.GetCityAction:
       return {...state, selectedCity: action.payload};
     case ActionType.GetOffersAction:
-      return {...state, offers: action.payload};
+      return {...state, offers: adaptToClient(action.payload)};
+    case ActionType.RequireAuthorization:
+      return {...state, authorizationStatus: action.payload, isDataLoaded: true};
+    case ActionType.RequireLogout:
+      return {...state, authorizationStatus: AuthorizationStatus.NoAuth};
     default:
       return state;
   }

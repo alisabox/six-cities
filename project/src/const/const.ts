@@ -64,8 +64,35 @@ export const sortOffers = (data: OffersType[], filter: string | null): OffersTyp
       return data.slice().sort((prev, next) => (prev.price - next.price));
     case SortMode.TOP_RATED:
       return data.slice().sort((prev, next) => (next.rating - prev.rating));
-    case SortMode.POPULAR:
     default:
       return data.slice();
   }
 };
+
+export const APIRoute = {
+  OFFERS: '/hotels',
+  LOGIN: '/login',
+  LOGOUT: '/logout',
+};
+
+export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean =>
+  authorizationStatus === AuthorizationStatus.Unknown;
+
+
+export const adaptToClient = (data: OffersType[]): OffersType[] => (data.map((item: OffersType) => {
+  const adaptedItem = Object.assign(
+    {},
+    item,
+    {
+      isFavorite: item['is_favorite'],
+      isPremium: item['is_premium'],
+      maxAdults: item['max_adults'],
+      previewImage: item['preview_image'],
+    },
+  );
+  delete adaptedItem['is_favorite'];
+  delete adaptedItem['is_premium'];
+  delete adaptedItem['max_adults'];
+  delete adaptedItem['preview_image'];
+  return adaptedItem;
+}));

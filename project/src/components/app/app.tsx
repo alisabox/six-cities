@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import {connect, ConnectedProps} from 'react-redux';
 import MainScreen from '../main/main';
 import LoginScreen from '../login/login';
 import FavoritesScreen from '../favorites/favorites';
@@ -7,23 +8,40 @@ import PropertyScreen from '../property/property';
 import Screen404 from '../screen-404/screen-404';
 import PrivateRoute from '../private-route/private-route';
 import {AppRoute, AuthorizationStatus} from '../../const/const';
-import {OffersType, ReviewsType} from '../../types/types';
+import {ReviewsType} from '../../types/types';
+import LoadingScreen from '../loading-screen/loading-screen';
+import {isCheckedAuth} from '../../const/const';
+import {State} from '../../types/types';
+
+const mapStateToProps = ({offers, authorizationStatus, isDataLoaded}: State) => ({
+  offers,
+  authorizationStatus,
+  isDataLoaded,
+});
+
+const connector = connect(mapStateToProps);
 
 type AppScreenProps = {
-  cardsNumber: number;
-  offers: OffersType[];
   reviews: ReviewsType[];
 }
 
-function App(props: AppScreenProps): JSX.Element {
-  const {cardsNumber, offers, reviews} = props;
+type PropsFromRedux = ConnectedProps<typeof connector> & AppScreenProps;
+
+function App(props: PropsFromRedux): JSX.Element {
+  const {offers, reviews, authorizationStatus, isDataLoaded} = props;
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
+
+  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   return (
     <BrowserRouter>
       <Switch>
         <Route path={AppRoute.ROOT} exact>
-          <MainScreen cardsNumber={cardsNumber} offers={offers}/>
+          <MainScreen offers={offers}/>
         </Route>
         <Route path={AppRoute.LOGIN} exact>
           <LoginScreen />
@@ -50,4 +68,5 @@ function App(props: AppScreenProps): JSX.Element {
   );
 }
 
-export default App;
+export {App};
+export default connector(App);

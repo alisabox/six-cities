@@ -1,3 +1,8 @@
+import { AuthorizationStatus } from '../const/const';
+import { getCity, getOffers, requireAuthorization, requireLogout } from '../store/action';
+import {ThunkAction, ThunkDispatch} from 'redux-thunk';
+import {AxiosInstance} from 'axios';
+
 export type LocationType = {
   latitude: number;
   longitude:  number;
@@ -33,6 +38,10 @@ export type OffersType = {
   rating: number,
   title: string,
   type: string,
+  ['is_favorite']?: boolean,
+  ['is_premium']?: boolean,
+  ['max_adults']?: number,
+  ['preview_image']?: string,
 };
 
 export type ReviewsType = {
@@ -46,11 +55,15 @@ export type ReviewsType = {
 export type State = {
   selectedCity: string;
   offers: OffersType[];
+  authorizationStatus: AuthorizationStatus,
+  isDataLoaded: boolean;
 }
 
 export enum ActionType {
   GetCityAction = 'MAIN_GET_CITY',
   GetOffersAction = 'MAIN_GET_OFFERS',
+  RequireAuthorization = 'USER/REQUIRE_AUTHORIZATION',
+  RequireLogout = 'USER/REQUIRE_LOGOUT',
 }
 
 export type GetCityAction = {
@@ -63,4 +76,17 @@ export type GetOffersAction = {
   payload: OffersType[];
 }
 
-export type Actions = GetCityAction | GetOffersAction;
+export type Actions =
+  | ReturnType<typeof getCity>
+  | ReturnType<typeof getOffers>
+  | ReturnType<typeof requireAuthorization>
+  | ReturnType<typeof requireLogout>;
+
+export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Actions>;
+
+export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Actions>;
+
+export type AuthData = {
+  login: string;
+  password: string;
+};
