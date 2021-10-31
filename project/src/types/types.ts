@@ -1,5 +1,5 @@
-import { AuthorizationStatus } from '../const/const';
-import { getCity, getOffers, requireAuthorization, requireLogout } from '../store/action';
+import { ActionType, AuthorizationStatus } from '../const/const';
+import { getCity, getOffers, requireAuthorization, requireLogout, redirectToRoute } from '../store/action';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AxiosInstance} from 'axios';
 
@@ -57,13 +57,7 @@ export type State = {
   offers: OffersType[];
   authorizationStatus: AuthorizationStatus,
   isDataLoaded: boolean;
-}
-
-export enum ActionType {
-  GetCityAction = 'MAIN_GET_CITY',
-  GetOffersAction = 'MAIN_GET_OFFERS',
-  RequireAuthorization = 'USER/REQUIRE_AUTHORIZATION',
-  RequireLogout = 'USER/REQUIRE_LOGOUT',
+  userEmail?: string;
 }
 
 export type GetCityAction = {
@@ -80,7 +74,8 @@ export type Actions =
   | ReturnType<typeof getCity>
   | ReturnType<typeof getOffers>
   | ReturnType<typeof requireAuthorization>
-  | ReturnType<typeof requireLogout>;
+  | ReturnType<typeof requireLogout>
+  | ReturnType<typeof redirectToRoute>;
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Actions>;
 

@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router as BrowserRouter, Route, Switch } from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
 import MainScreen from '../main/main';
 import LoginScreen from '../login/login';
@@ -7,11 +7,12 @@ import FavoritesScreenEmpty from '../favorites-empty/favorites-empty';
 import PropertyScreen from '../property/property';
 import Screen404 from '../screen-404/screen-404';
 import PrivateRoute from '../private-route/private-route';
-import {AppRoute, AuthorizationStatus} from '../../const/const';
+import {AppRoute} from '../../const/const';
 import {ReviewsType} from '../../types/types';
 import LoadingScreen from '../loading-screen/loading-screen';
 import {isCheckedAuth} from '../../const/const';
 import {State} from '../../types/types';
+import browserHistory from '../../browser-history/browser-history';
 
 const mapStateToProps = ({offers, authorizationStatus, isDataLoaded}: State) => ({
   offers,
@@ -38,7 +39,7 @@ function App(props: PropsFromRedux): JSX.Element {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route path={AppRoute.ROOT} exact>
           <MainScreen offers={offers}/>
@@ -54,7 +55,6 @@ function App(props: PropsFromRedux): JSX.Element {
               ? () => <FavoritesScreen favoriteOffers={favoriteOffers}/>
               : () => <FavoritesScreenEmpty />
           }
-          authorizationStatus={AuthorizationStatus.Auth}
         >
         </PrivateRoute>
         <Route path={AppRoute.OFFER}>

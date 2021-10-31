@@ -1,11 +1,12 @@
-import { State, Actions, ActionType } from '../types/types';
-import {adaptToClient, AuthorizationStatus} from '../const/const';
+import { State, Actions } from '../types/types';
+import {ActionType, adaptToClient, AuthorizationStatus} from '../const/const';
 
 export const initialState: State = {
   selectedCity: 'Paris',
   offers: [],
   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoaded: false,
+  userEmail: '',
 };
 
 export const reducer = (state: State = initialState, action: Actions): State => {
@@ -15,7 +16,7 @@ export const reducer = (state: State = initialState, action: Actions): State => 
     case ActionType.GetOffersAction:
       return {...state, offers: adaptToClient(action.payload)};
     case ActionType.RequireAuthorization:
-      return {...state, authorizationStatus: action.payload, isDataLoaded: true};
+      return {...state, authorizationStatus: action.payload.authStatus, userEmail: action.payload.email, isDataLoaded: true};
     case ActionType.RequireLogout:
       return {...state, authorizationStatus: AuthorizationStatus.NoAuth};
     default:

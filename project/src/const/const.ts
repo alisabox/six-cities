@@ -96,3 +96,11 @@ export const adaptToClient = (data: OffersType[]): OffersType[] => (data.map((it
   delete adaptedItem['preview_image'];
   return adaptedItem;
 }));
+
+export enum ActionType {
+  GetCityAction = 'MAIN_GET_CITY',
+  GetOffersAction = 'MAIN_GET_OFFERS',
+  RequireAuthorization = 'USER/REQUIRE_AUTHORIZATION',
+  RequireLogout = 'USER/REQUIRE_LOGOUT',
+  RedirectToRoute = 'USER/REDIRECT',
+}
