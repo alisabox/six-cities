@@ -1,5 +1,5 @@
 import {useRef, FormEvent} from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
 import {loginAction} from '../../store/api-actions';
 import {ThunkAppDispatch, AuthData} from '../../types/types';
@@ -19,8 +19,6 @@ function LoginScreen(props: PropsFromRedux):JSX.Element {
 
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-
-  const history = useHistory();
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -75,7 +73,6 @@ function LoginScreen(props: PropsFromRedux):JSX.Element {
                 />
               </div>
               <button
-                onClick={() => history.push(AppRoute.ROOT)}
                 className="login__submit form__submit button"
                 type="submit"
               >
