@@ -1,5 +1,5 @@
 import { State, Actions } from '../types/types';
-import {ActionType, adaptToClient, AuthorizationStatus} from '../const/const';
+import {ActionType, adaptReviewsToClient, adaptToClient, AuthorizationStatus} from '../const/const';
 
 export const initialState: State = {
   selectedCity: 'Paris',
@@ -7,6 +7,10 @@ export const initialState: State = {
   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoaded: false,
   userEmail: '',
+  offer: undefined,
+  nearbyOffers: undefined,
+  reviews: undefined,
+  isPostSuccessfull: false,
 };
 
 export const reducer = (state: State = initialState, action: Actions): State => {
@@ -14,7 +18,19 @@ export const reducer = (state: State = initialState, action: Actions): State => 
     case ActionType.GetCityAction:
       return {...state, selectedCity: action.payload};
     case ActionType.GetOffersAction:
-      return {...state, offers: adaptToClient(action.payload)};
+      return {...state, offers: action.payload.map((item)  => adaptToClient(item))};
+    case ActionType.GetOfferByIDAction:
+      return {...state, offer: adaptToClient(action.payload)};
+    case ActionType.ClearOfferByIDAction:
+      return {...state, offer: undefined, nearbyOffers: undefined, reviews: undefined};
+    case ActionType.GetNearByOffers:
+      return {...state, nearbyOffers: action.payload.map((item)  => adaptToClient(item))};
+    case ActionType.GetReviews:
+      return {...state, reviews: action.payload.map((item)  => adaptReviewsToClient(item))};
+    case ActionType.PostReview:
+      return {...state, isPostSuccessfull: true, reviews: action.payload.map((item)  => adaptReviewsToClient(item))};
+    case ActionType.ClearPostReviewStatus:
+      return {...state, isPostSuccessfull: false};
     case ActionType.RequireAuthorization:
       return {...state, authorizationStatus: action.payload.authStatus, userEmail: action.payload.email, isDataLoaded: true};
     case ActionType.RequireLogout:
