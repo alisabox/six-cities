@@ -1,10 +1,11 @@
-import { OffersType } from '../types/types';
+import { OffersType, ReviewsType } from '../types/types';
 
 export const AppRoute = {
   ROOT: '/',
   LOGIN: '/login',
   OFFER: '/offer',
   FAVORITE: '/favorite',
+  NOT_FOUND: '/not-found',
 } as const;
 
 export enum AuthorizationStatus {
@@ -73,33 +74,66 @@ export const APIRoute = {
   OFFERS: '/hotels',
   LOGIN: '/login',
   LOGOUT: '/logout',
+  REVIEWS: '/comments',
 };
 
 export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean =>
   authorizationStatus === AuthorizationStatus.Unknown;
 
 
-export const adaptToClient = (data: OffersType[]): OffersType[] => (data.map((item: OffersType) => {
+export const adaptToClient = (data: OffersType): OffersType => {
   const adaptedItem = Object.assign(
     {},
-    item,
+    data,
     {
-      isFavorite: item['is_favorite'],
-      isPremium: item['is_premium'],
-      maxAdults: item['max_adults'],
-      previewImage: item['preview_image'],
+      isFavorite: data['is_favorite'],
+      isPremium: data['is_premium'],
+      maxAdults: data['max_adults'],
+      previewImage: data['preview_image'],
+      host: {
+        avatarUrl: data.host['avatar_url'],
+        id: data.host.id,
+        isPro: data.host['is_pro'],
+        name: data.host.name,
+      },
     },
   );
   delete adaptedItem['is_favorite'];
   delete adaptedItem['is_premium'];
   delete adaptedItem['max_adults'];
   delete adaptedItem['preview_image'];
+  delete adaptedItem.host['avatar_url'];
+  delete adaptedItem.host['is_pro'];
   return adaptedItem;
-}));
+};
+
+export const adaptReviewsToClient = (data: ReviewsType): ReviewsType => {
+  const adaptedItem = Object.assign(
+    {},
+    data,
+    {
+      user: {
+        avatarUrl: data.user['avatar_url'],
+        id: data.user.id,
+        isPro: data.user['is_pro'],
+        name: data.user.name,
+      },
+    },
+  );
+  delete adaptedItem.user['avatar_url'];
+  delete adaptedItem.user['is_pro'];
+  return adaptedItem;
+};
 
 export enum ActionType {
   GetCityAction = 'MAIN_GET_CITY',
   GetOffersAction = 'MAIN_GET_OFFERS',
+  GetOfferByIDAction = 'OFFERS/GET_OFFER',
+  ClearOfferByIDAction = 'OFFERS/CLEAR_OFFER',
+  GetNearByOffers = 'OFFERS/GET_NEARBY',
+  GetReviews = 'OFFERS/GET_REVIEWS',
+  PostReview = 'OFFERS/POST_REVIEW',
+  ClearPostReviewStatus = 'OFFERS/CLEAR_POST_REVIEW_STATUS',
   RequireAuthorization = 'USER/REQUIRE_AUTHORIZATION',
   RequireLogout = 'USER/REQUIRE_LOGOUT',
   RedirectToRoute = 'USER/REDIRECT',

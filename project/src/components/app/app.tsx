@@ -8,7 +8,6 @@ import PropertyScreen from '../property/property';
 import Screen404 from '../screen-404/screen-404';
 import PrivateRoute from '../private-route/private-route';
 import {AppRoute} from '../../const/const';
-import {ReviewsType} from '../../types/types';
 import LoadingScreen from '../loading-screen/loading-screen';
 import {isCheckedAuth} from '../../const/const';
 import {State} from '../../types/types';
@@ -22,14 +21,10 @@ const mapStateToProps = ({offers, authorizationStatus, isDataLoaded}: State) => 
 
 const connector = connect(mapStateToProps);
 
-type AppScreenProps = {
-  reviews: ReviewsType[];
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector> & AppScreenProps;
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function App(props: PropsFromRedux): JSX.Element {
-  const {offers, reviews, authorizationStatus, isDataLoaded} = props;
+  const {offers, authorizationStatus, isDataLoaded} = props;
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
   if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
@@ -57,8 +52,11 @@ function App(props: PropsFromRedux): JSX.Element {
           }
         >
         </PrivateRoute>
-        <Route path={AppRoute.OFFER}>
-          <PropertyScreen reviews={reviews} offers={offers}/>
+        <Route path={`${AppRoute.OFFER}/:id`}>
+          <PropertyScreen />
+        </Route>
+        <Route path={AppRoute.NOT_FOUND}>
+          <Screen404 />
         </Route>
         <Route>
           <Screen404 />

@@ -29,6 +29,7 @@ function OffersList({selectedCity, offers}:OffersProps):JSX.Element {
 
   useEffect(() => {
     setSortedOffers(offers);
+    window.scrollTo(0,0);
   }, [offers]);
 
   useEffect(() => {

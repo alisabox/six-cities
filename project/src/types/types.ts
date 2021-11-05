@@ -1,5 +1,5 @@
 import { ActionType, AuthorizationStatus } from '../const/const';
-import { getCity, getOffers, requireAuthorization, requireLogout, redirectToRoute } from '../store/action';
+import { getCity, getOffers, requireAuthorization, requireLogout, redirectToRoute, getOfferByID, clearOfferByID, getNearByOffers, getReviews, postReviewAction, clearPostReviewStatus } from '../store/action';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AxiosInstance} from 'axios';
 
@@ -19,6 +19,8 @@ export type UserType = {
   id: number;
   isPro: boolean;
   name: string;
+  ['avatar_url']?: string,
+  ['is_pro']?: boolean,
 }
 
 export type OffersType = {
@@ -52,12 +54,21 @@ export type ReviewsType = {
   user: UserType;
 }
 
+export type PostReviewType = {
+  comment: string;
+  rating: number;
+}
+
 export type State = {
   selectedCity: string;
   offers: OffersType[];
   authorizationStatus: AuthorizationStatus,
   isDataLoaded: boolean;
   userEmail?: string;
+  offer?: OffersType;
+  nearbyOffers?: OffersType[];
+  reviews?: ReviewsType[];
+  isPostSuccessfull: boolean;
 }
 
 export type GetCityAction = {
@@ -70,9 +81,43 @@ export type GetOffersAction = {
   payload: OffersType[];
 }
 
+export type GetOfferByIDAction = {
+  type: ActionType.GetOfferByIDAction;
+  payload: OffersType;
+}
+
+export type ClearOfferByIDAction = {
+  type: ActionType.ClearOfferByIDAction;
+}
+
+export type GetNearByOffers = {
+  type: ActionType.GetNearByOffers;
+  payload: OffersType[];
+}
+
+export type GetReviews = {
+  type: ActionType.GetReviews;
+  payload: ReviewsType[];
+}
+
+export type PostReview = {
+  type: ActionType.PostReview;
+  payload: ReviewsType[];
+}
+
+export type ClearPostReviewStatus = {
+  type: ActionType.ClearPostReviewStatus;
+}
+
 export type Actions =
   | ReturnType<typeof getCity>
   | ReturnType<typeof getOffers>
+  | ReturnType<typeof getOfferByID>
+  | ReturnType<typeof clearOfferByID>
+  | ReturnType<typeof getNearByOffers>
+  | ReturnType<typeof getReviews>
+  | ReturnType<typeof postReviewAction>
+  | ReturnType<typeof clearPostReviewStatus>
   | ReturnType<typeof requireAuthorization>
   | ReturnType<typeof requireLogout>
   | ReturnType<typeof redirectToRoute>;

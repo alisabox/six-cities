@@ -1,12 +1,21 @@
 import ReviewForm from '../review-form/review-form';
-import {ReviewsType} from '../../types/types';
-import {MAX_RATING} from '../../const/const';
+import {ReviewsType, State} from '../../types/types';
+import {AuthorizationStatus, MAX_RATING} from '../../const/const';
+import { connect, ConnectedProps } from 'react-redux';
 
 type ReviewsListProps = {
   reviews: ReviewsType[];
 }
 
-function ReviewsList({reviews}: ReviewsListProps):JSX.Element {
+const mapStateToProps = ({authorizationStatus}: State) => ({
+  authorizationStatus,
+});
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector> & ReviewsListProps;
+
+function ReviewsList({reviews, authorizationStatus}: PropsFromRedux):JSX.Element {
   return (
     <section className="property__reviews reviews">
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews?.length}</span></h2>
@@ -45,10 +54,13 @@ function ReviewsList({reviews}: ReviewsListProps):JSX.Element {
         }
       </ul>
       {
-        <ReviewForm />
+        authorizationStatus === AuthorizationStatus.Auth
+          ? <ReviewForm />
+          : ''
       }
     </section>
   );
 }
 
-export default ReviewsList;
+export {ReviewsList};
+export default connector(ReviewsList);

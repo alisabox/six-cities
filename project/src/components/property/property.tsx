@@ -1,26 +1,58 @@
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
-import {OffersType, ReviewsType} from '../../types/types';
+import {State} from '../../types/types';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import Card from '../card/card';
 import { useEffect } from 'react';
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect, ConnectedProps } from 'react-redux';
+import { fetchNearByOffersAction, fetchOfferByIDAction, fetchReviews } from '../../store/api-actions';
+import { clearOfferByID } from '../../store/action';
+import LoadingScreen from '../loading-screen/loading-screen';
+import UserNavigation from '../user-navigation/user-navigation';
 
-type PropertyScreenProps = {
-  reviews: ReviewsType[];
-  offers: OffersType[];
-}
+type OfferParams = {
+  id: string;
+};
 
-function PropertyScreen({reviews, offers}: PropertyScreenProps):JSX.Element {
-  const {state} = useLocation() as {state: OffersType};
+const mapStateToProps = ({offer, nearbyOffers, reviews}: State) => ({
+  offer,
+  nearbyOffers,
+  reviews,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+  onPageLoad: (id) => fetchOfferByIDAction(id),
+  getNearByOffers: (id) => fetchNearByOffersAction(id),
+  getReviews: (id) => fetchReviews(id),
+  onDismount: clearOfferByID,
+}, dispatch);
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+function PropertyScreen({reviews, offer, onPageLoad, onDismount, nearbyOffers, getNearByOffers, getReviews}: PropsFromRedux):JSX.Element {
+  const params = useParams<OfferParams>();
+  const id = parseInt(params.id, 10);
 
   useEffect(() => {
+    onPageLoad(id);
+    getNearByOffers(id);
+    getReviews(id);
     window.scrollTo(0, 0);
-  }, [state]);
+    return ()  => {onDismount();};
+  }, [getNearByOffers, getReviews, id, onDismount, onPageLoad]);
 
-  const {images, isPremium, title, isFavorite, rating, type, bedrooms, maxAdults, price, goods, host, description, id} = state;
+  if (!offer) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
+  const {images, isPremium, title, isFavorite, rating, type, bedrooms, maxAdults, price, goods, host, description} = offer;
   const {avatarUrl, isPro, name} = host;
-  const closeByOffers = offers.filter((offer) => offer.id !== id).slice(0, 3);
 
   return (
     <div className="page">
@@ -33,15 +65,7 @@ function PropertyScreen({reviews, offers}: PropertyScreenProps):JSX.Element {
               </Link>
             </div>
             <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="/">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__login">Sign in</span>
-                  </a>
-                </li>
-              </ul>
+              <UserNavigation />
             </nav>
           </div>
         </div>
@@ -135,13 +159,19 @@ function PropertyScreen({reviews, offers}: PropertyScreenProps):JSX.Element {
                   </p>
                 </div>
               </div>
-
-              <ReviewsList reviews={reviews}/>
-
+              {
+                reviews
+                  ? <ReviewsList reviews={reviews}/>
+                  : ''
+              }
             </div>
           </div>
           <section className="property__map map">
-            <Map offers={closeByOffers}/>
+            {
+              nearbyOffers
+                ? <Map offers={nearbyOffers}/>
+                :  ''
+            }
           </section>
         </section>
         <div className="container">
@@ -149,7 +179,9 @@ function PropertyScreen({reviews, offers}: PropertyScreenProps):JSX.Element {
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
               {
-                closeByOffers.map((offer) => <Card key={offer.id} offer={offer} isPropertyScreen />)
+                nearbyOffers
+                  ? nearbyOffers.map((nearbyOffer) => <Card key={nearbyOffer.id} offer={nearbyOffer} isPropertyScreen />)
+                  : ''
               }
             </div>
           </section>
@@ -159,4 +191,5 @@ function PropertyScreen({reviews, offers}: PropertyScreenProps):JSX.Element {
   );
 }
 
-export default PropertyScreen;
+export {PropertyScreen};
+export default connector(PropertyScreen);
