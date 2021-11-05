@@ -1,29 +1,20 @@
-import {MouseEvent} from 'react';
-import {Dispatch, bindActionCreators} from 'redux';
-import { connect, ConnectedProps } from 'react-redux';
+import { MouseEvent } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { AuthorizationStatus } from '../../const/const';
-import { State } from '../../types/types';
 import { logoutAction } from '../../store/api-actions';
 import { Link } from 'react-router-dom';
+import { getAuthorizationStatus, getUserEmail } from '../../store/reducers/user/user-selectors';
 
-const mapStateToProps = ({authorizationStatus, userEmail}: State) => ({
-  authorizationStatus,
-  userEmail,
-});
+function UserNavigation(): JSX.Element {
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  onLogout: logoutAction,
-}, dispatch);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const userEmail = useSelector(getUserEmail);
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function UserNavigation({authorizationStatus, userEmail, onLogout}: PropsFromRedux): JSX.Element {
+  const dispatch = useDispatch();
 
   const handleLogoutClick = (evt: MouseEvent<HTMLElement>) => {
     evt.preventDefault();
-    onLogout();
+    dispatch(logoutAction());
   };
 
   return (
@@ -56,5 +47,4 @@ function UserNavigation({authorizationStatus, userEmail, onLogout}: PropsFromRed
   );
 }
 
-export {UserNavigation};
-export default connector(UserNavigation);
+export default UserNavigation;

@@ -1,49 +1,38 @@
 import {Link, useParams} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
 import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
-import {State} from '../../types/types';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import Card from '../card/card';
 import { useEffect } from 'react';
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect, ConnectedProps } from 'react-redux';
-import { fetchNearByOffersAction, fetchOfferByIDAction, fetchReviews } from '../../store/api-actions';
+import { fetchNearByOffersAction, fetchOfferByIDAction, fetchReviewsAction } from '../../store/api-actions';
 import { clearOfferByID } from '../../store/action';
 import LoadingScreen from '../loading-screen/loading-screen';
 import UserNavigation from '../user-navigation/user-navigation';
+import { getNearbyOffers, getOfferByID } from '../../store/reducers/offers/offers-selectors';
+import { getReviews } from '../../store/reducers/reviews/reviews-selectors';
 
 type OfferParams = {
   id: string;
 };
 
-const mapStateToProps = ({offer, nearbyOffers, reviews}: State) => ({
-  offer,
-  nearbyOffers,
-  reviews,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  onPageLoad: (id) => fetchOfferByIDAction(id),
-  getNearByOffers: (id) => fetchNearByOffersAction(id),
-  getReviews: (id) => fetchReviews(id),
-  onDismount: clearOfferByID,
-}, dispatch);
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function PropertyScreen({reviews, offer, onPageLoad, onDismount, nearbyOffers, getNearByOffers, getReviews}: PropsFromRedux):JSX.Element {
+function PropertyScreen():JSX.Element {
   const params = useParams<OfferParams>();
   const id = parseInt(params.id, 10);
 
+  const offer = useSelector(getOfferByID);
+  const nearbyOffers = useSelector(getNearbyOffers);
+  const reviews = useSelector(getReviews);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    onPageLoad(id);
-    getNearByOffers(id);
-    getReviews(id);
+    dispatch(fetchOfferByIDAction(id));
+    dispatch(fetchNearByOffersAction(id));
+    dispatch(fetchReviewsAction(id));
     window.scrollTo(0, 0);
-    return ()  => {onDismount();};
-  }, [getNearByOffers, getReviews, id, onDismount, onPageLoad]);
+    return ()  => {dispatch(clearOfferByID());};
+  }, [dispatch, id]);
 
   if (!offer) {
     return (
@@ -191,5 +180,4 @@ function PropertyScreen({reviews, offer, onPageLoad, onDismount, nearbyOffers, g
   );
 }
 
-export {PropertyScreen};
-export default connector(PropertyScreen);
+export default PropertyScreen;

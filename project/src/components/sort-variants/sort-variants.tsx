@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, memo, useEffect, useState } from 'react';
 import { SortMode } from '../../const/const';
 
 
@@ -71,4 +71,4 @@ function SortVariants({onSortModeChange, selectedCity}: SortVariantsProps):JSX.E
   );
 }
 
-export default SortVariants;
+export default memo(SortVariants);

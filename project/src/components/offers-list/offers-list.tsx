@@ -1,7 +1,7 @@
 import Card from '../card/card';
 import {OffersType} from '../../types/types';
 import Map from '../map/map';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SortVariants from '../sort-variants/sort-variants';
 import { sortOffers } from '../../const/const';
 
@@ -12,9 +12,9 @@ type OffersProps = {
 
 function OffersList({selectedCity, offers}:OffersProps):JSX.Element {
 
-  const listItemHoverHandler = (id?: number) => {
+  const listItemHoverHandler = useCallback((id?: number) => {
     onListItemHover(id);
-  };
+  }, []);
 
   const [selectedPoint, setSelectedPoint] = useState<number | undefined>(undefined);
 
@@ -23,9 +23,9 @@ function OffersList({selectedCity, offers}:OffersProps):JSX.Element {
   };
 
   const [sortedOffers, setSortedOffers] = useState(offers);
-  const onSortModeChange = (sort: string | null) => {
+  const onSortModeChange = useCallback((sort: string | null) => {
     setSortedOffers(sortOffers(offers, sort));
-  };
+  }, [offers]);
 
   useEffect(() => {
     setSortedOffers(offers);
