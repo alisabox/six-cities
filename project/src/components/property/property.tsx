@@ -1,6 +1,6 @@
-import {Link, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
+import {RoomTypes, MAX_RATING} from '../../const/const';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import Card from '../card/card';
@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { fetchNearByOffersAction, fetchOfferByIDAction, fetchReviewsAction } from '../../store/api-actions';
 import { clearOfferByID } from '../../store/action';
 import LoadingScreen from '../loading-screen/loading-screen';
-import UserNavigation from '../user-navigation/user-navigation';
+import Header from '../header/header';
 import { getNearbyOffers, getOfferByID } from '../../store/reducers/offers/offers-selectors';
 import { getReviews } from '../../store/reducers/reviews/reviews-selectors';
 
@@ -45,20 +45,7 @@ function PropertyScreen():JSX.Element {
 
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link className="header__logo-link" to={AppRoute.ROOT}>
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-              </Link>
-            </div>
-            <nav className="header__nav">
-              <UserNavigation />
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header isWithUserNavigation />
 
       <main className="page__main page__main--property">
         <section className="property">

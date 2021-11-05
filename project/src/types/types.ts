@@ -1,6 +1,5 @@
 import {Action} from 'redux';
 import { ActionType, AuthorizationStatus } from '../const/const';
-// import { getCity, getOffers, requireAuthorization, requireLogout, redirectToRoute, getOfferByID, clearOfferByID, getNearByOffers, getReviewsAction, postReviewAction, clearPostReviewStatus } from '../store/action';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AxiosInstance} from 'axios';
 import {RootState} from '../store/reducers/root-reducer';
@@ -86,6 +85,7 @@ export type OffersState = {
   isDataLoaded: boolean;
   offer?: OffersType;
   nearbyOffers?: OffersType[];
+  favoriteOffers: OffersType[];
 }
 
 export type ReviewsState = {
@@ -130,19 +130,6 @@ export type PostReview = {
 export type ClearPostReviewStatus = {
   type: ActionType.ClearPostReviewStatus;
 }
-
-// export type Actions =
-//   | ReturnType<typeof getCity>
-//   | ReturnType<typeof getOffers>
-//   | ReturnType<typeof getOfferByID>
-//   | ReturnType<typeof clearOfferByID>
-//   | ReturnType<typeof getNearByOffers>
-//   | ReturnType<typeof getReviewsAction>
-//   | ReturnType<typeof postReviewAction>
-//   | ReturnType<typeof clearPostReviewStatus>
-//   | ReturnType<typeof requireAuthorization>
-//   | ReturnType<typeof requireLogout>
-//   | ReturnType<typeof redirectToRoute>;
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;
 

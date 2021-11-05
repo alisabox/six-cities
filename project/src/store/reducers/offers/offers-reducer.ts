@@ -9,6 +9,7 @@ export const initialState: OffersState = {
   isDataLoaded: false,
   offer: undefined,
   nearbyOffers: undefined,
+  favoriteOffers: [],
 };
 
 export const offersData = createReducer(initialState, (builder) => {

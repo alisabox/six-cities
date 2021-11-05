@@ -1,12 +1,11 @@
 import {MouseEvent} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {Link} from 'react-router-dom';
 import { getCity } from '../../store/action';
-import {AppRoute, cities} from '../../const/const';
+import {cities} from '../../const/const';
 import {OffersType} from '../../types/types';
 import OffersList from '../offers-list/offers-list';
 import MainScreenEmpty from '../main-empty/main-empty';
-import UserNavigation from '../user-navigation/user-navigation';
+import Header from '../header/header';
 import { getSelectedCity } from '../../store/reducers/offers/offers-selectors';
 
 
@@ -31,20 +30,7 @@ function MainScreen({offers}:MainScreenProps):JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link className="header__logo-link header__logo-link--active" to={AppRoute.ROOT}>
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-              </Link>
-            </div>
-            <nav className="header__nav">
-              <UserNavigation />
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header isWithUserNavigation />
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
