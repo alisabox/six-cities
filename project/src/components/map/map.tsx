@@ -1,4 +1,4 @@
-import {useRef, useEffect} from 'react';
+import {useRef, useEffect, memo} from 'react';
 import {Icon, Marker} from 'leaflet';
 import useMap from '../../hooks/useMap';
 import {OffersType} from '../../types/types';
@@ -58,4 +58,4 @@ function Map(props: MapProps):JSX.Element {
   return <div style={{height: '100%'}} ref={mapRef}></div>;
 }
 
-export default Map;
+export default memo(Map);

@@ -1,4 +1,4 @@
-import {MouseEvent} from 'react';
+import {memo, MouseEvent} from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute, RoomTypes, MAX_RATING, Screen, BasicCardImageSize, FavoriteCardImageSize} from '../../const/const';
 import {OffersType} from '../../types/types';
@@ -92,4 +92,4 @@ function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}
   );
 }
 
-export default Card;
+export default memo(Card);

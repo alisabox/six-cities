@@ -1,7 +1,8 @@
+import {Action} from 'redux';
 import { ActionType, AuthorizationStatus } from '../const/const';
-import { getCity, getOffers, requireAuthorization, requireLogout, redirectToRoute, getOfferByID, clearOfferByID, getNearByOffers, getReviews, postReviewAction, clearPostReviewStatus } from '../store/action';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AxiosInstance} from 'axios';
+import {RootState} from '../store/reducers/root-reducer';
 
 export type LocationType = {
   latitude: number;
@@ -59,7 +60,7 @@ export type PostReviewType = {
   rating: number;
 }
 
-export type State = {
+export type StateOld = {
   selectedCity: string;
   offers: OffersType[];
   authorizationStatus: AuthorizationStatus,
@@ -67,6 +68,27 @@ export type State = {
   userEmail?: string;
   offer?: OffersType;
   nearbyOffers?: OffersType[];
+  reviews?: ReviewsType[];
+  isPostSuccessfull: boolean;
+}
+
+export type State = RootState;
+
+export type UserState = {
+  authorizationStatus: AuthorizationStatus,
+  userEmail?: string
+}
+
+export type OffersState = {
+  selectedCity: string;
+  offers: OffersType[];
+  isDataLoaded: boolean;
+  offer?: OffersType;
+  nearbyOffers?: OffersType[];
+  favoriteOffers: OffersType[];
+}
+
+export type ReviewsState = {
   reviews?: ReviewsType[];
   isPostSuccessfull: boolean;
 }
@@ -109,22 +131,9 @@ export type ClearPostReviewStatus = {
   type: ActionType.ClearPostReviewStatus;
 }
 
-export type Actions =
-  | ReturnType<typeof getCity>
-  | ReturnType<typeof getOffers>
-  | ReturnType<typeof getOfferByID>
-  | ReturnType<typeof clearOfferByID>
-  | ReturnType<typeof getNearByOffers>
-  | ReturnType<typeof getReviews>
-  | ReturnType<typeof postReviewAction>
-  | ReturnType<typeof clearPostReviewStatus>
-  | ReturnType<typeof requireAuthorization>
-  | ReturnType<typeof requireLogout>
-  | ReturnType<typeof redirectToRoute>;
+export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;
 
-export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Actions>;
-
-export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Actions>;
+export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Action>;
 
 export type AuthData = {
   login: string;

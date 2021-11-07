@@ -1,54 +1,82 @@
-import { ClearOfferByIDAction, ClearPostReviewStatus, GetCityAction, GetNearByOffers, GetOfferByIDAction, GetOffersAction, GetReviews, OffersType, PostReview, ReviewsType } from '../types/types';
+import {createAction} from '@reduxjs/toolkit';
+import { OffersType, ReviewsType } from '../types/types';
 import {ActionType, AuthorizationStatus} from '../const/const';
 
-export const getCity = (city: string): GetCityAction => ({
-  type: ActionType.GetCityAction,
-  payload: city,
-});
+export const getCity = createAction(
+  ActionType.GetCityAction,
+  (city: string) => ({
+    payload: {
+      city,
+    },
+  }),
+);
 
-export const getOffers = (offers: OffersType[]): GetOffersAction => ({
-  type: ActionType.GetOffersAction,
-  payload: offers,
-});
+export const getOffers = createAction(
+  ActionType.GetOffersAction,
+  (offers: OffersType[]) => ({
+    payload: {
+      offers,
+    },
+  }),
+);
 
-export const getOfferByID = (offer: OffersType): GetOfferByIDAction => ({
-  type: ActionType.GetOfferByIDAction,
-  payload: offer,
-});
+export const getOfferByID = createAction(
+  ActionType.GetOfferByIDAction,
+  (offer: OffersType) => ({
+    payload: {
+      offer,
+    },
+  }),
+);
 
-export const clearOfferByID = (): ClearOfferByIDAction => ({
-  type: ActionType.ClearOfferByIDAction,
-});
+export const clearOfferByID = createAction(ActionType.ClearOfferByIDAction);
 
-export const getNearByOffers = (offers: OffersType[]): GetNearByOffers => ({
-  type: ActionType.GetNearByOffers,
-  payload: offers,
-});
+export const getNearByOffers = createAction(
+  ActionType.GetNearByOffers,
+  (offers: OffersType[]) => ({
+    payload: {
+      offers,
+    },
+  }),
+);
 
-export const getReviews = (reviews: ReviewsType[]): GetReviews => ({
-  type: ActionType.GetReviews,
-  payload: reviews,
-});
+export const getReviewsAction = createAction(
+  ActionType.GetReviews,
+  (reviews: ReviewsType[]) => ({
+    payload: {
+      reviews,
+    },
+  }),
+);
 
-export const postReviewAction = (reviews: ReviewsType[]): PostReview => ({
-  type: ActionType.PostReview,
-  payload: reviews,
-});
+export const postReviewAction = createAction(
+  ActionType.PostReview,
+  (reviews: ReviewsType[]) => ({
+    payload: {
+      reviews,
+    },
+  }),
+);
 
-export const clearPostReviewStatus = (): ClearPostReviewStatus => ({
-  type: ActionType.ClearPostReviewStatus,
-});
+export const clearPostReviewStatus = createAction(ActionType.ClearPostReviewStatus);
 
-export const requireAuthorization = (authStatus: AuthorizationStatus, email?: string) => ({
-  type: ActionType.RequireAuthorization,
-  payload: {authStatus, email},
-} as const);
+export const requireAuthorization = createAction(
+  ActionType.RequireAuthorization,
+  (authStatus: AuthorizationStatus, email?: string) => ({
+    payload: {
+      authStatus,
+      email,
+    },
+  }),
+);
 
-export const requireLogout = () => ({
-  type: ActionType.RequireLogout,
-} as const);
+export const requireLogout = createAction(ActionType.RequireLogout);
 
-export const redirectToRoute = (url: string) => ({
-  type: ActionType.RedirectToRoute,
-  payload: url,
-} as const);
+export const redirectToRoute = createAction(
+  ActionType.RedirectToRoute,
+  (url: string) => ({
+    payload: {
+      url,
+    },
+  }),
+);

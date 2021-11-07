@@ -1,21 +1,10 @@
 import {useRef, FormEvent} from 'react';
-import {Link} from 'react-router-dom';
-import {connect, ConnectedProps} from 'react-redux';
+import { useDispatch} from 'react-redux';
 import {loginAction} from '../../store/api-actions';
-import {ThunkAppDispatch, AuthData} from '../../types/types';
-import {AppRoute} from '../../const/const';
+import Header from '../header/header';
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSubmit(authData: AuthData) {
-    dispatch(loginAction(authData));
-  },
-});
-const connector = connect(null, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function LoginScreen(props: PropsFromRedux):JSX.Element {
-  const {onSubmit} = props;
+function LoginScreen():JSX.Element {
+  const dispatch = useDispatch();
 
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -24,26 +13,16 @@ function LoginScreen(props: PropsFromRedux):JSX.Element {
     evt.preventDefault();
 
     if (loginRef.current !== null && passwordRef.current !== null) {
-      onSubmit({
+      dispatch(loginAction({
         login: loginRef.current.value,
         password: passwordRef.current.value,
-      });
+      }));
     }
   };
 
   return (
     <div className="page page--gray page--login">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link className="header__logo-link" to={AppRoute.ROOT}>
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="page__main page__main--login">
         <div className="page__login-container container">
@@ -93,5 +72,4 @@ function LoginScreen(props: PropsFromRedux):JSX.Element {
   );
 }
 
-export {LoginScreen};
-export default connector(LoginScreen);
+export default LoginScreen;

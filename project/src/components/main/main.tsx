@@ -1,59 +1,36 @@
 import {MouseEvent} from 'react';
-import {Dispatch, bindActionCreators} from 'redux';
-import { connect,ConnectedProps } from 'react-redux';
-import {Link} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
 import { getCity } from '../../store/action';
-import {AppRoute, cities} from '../../const/const';
-import {OffersType, State} from '../../types/types';
+import {cities} from '../../const/const';
+import {OffersType} from '../../types/types';
 import OffersList from '../offers-list/offers-list';
 import MainScreenEmpty from '../main-empty/main-empty';
-import UserNavigation from '../user-navigation/user-navigation';
+import Header from '../header/header';
+import { getSelectedCity } from '../../store/reducers/offers/offers-selectors';
 
 
 type MainScreenProps = {
   offers: OffersType[];
 }
 
-const mapStateToProps = ({selectedCity}: State) => ({
-  selectedCity,
-});
+function MainScreen({offers}:MainScreenProps):JSX.Element {
+  const selectedCity = useSelector(getSelectedCity);
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  onCityChange: getCity,
-}, dispatch);
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & MainScreenProps;
-
-
-function MainScreen({offers, selectedCity, onCityChange}:ConnectedComponentProps):JSX.Element {
   const offersInSelectedCity = offers.filter((offer) =>  offer.city.name === selectedCity);
+
+  const dispatch = useDispatch();
+
   const handleCityClick = (evt: MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     const input = evt.target as HTMLElement;
     if (input.textContent) {
-      onCityChange(input.textContent);
+      dispatch(getCity(input.textContent));
     }
   };
 
   return (
     <div className="page page--gray page--main">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link className="header__logo-link header__logo-link--active" to={AppRoute.ROOT}>
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-              </Link>
-            </div>
-            <nav className="header__nav">
-              <UserNavigation />
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header isWithUserNavigation />
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
@@ -86,5 +63,4 @@ function MainScreen({offers, selectedCity, onCityChange}:ConnectedComponentProps
   );
 }
 
-export {MainScreen};
-export default connector(MainScreen);
+export default MainScreen;

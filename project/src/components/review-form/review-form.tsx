@@ -1,31 +1,24 @@
 import {useState, ChangeEvent, SyntheticEvent, useEffect} from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { bindActionCreators, Dispatch } from 'redux';
 import { clearPostReviewStatus } from '../../store/action';
 import { postReview } from '../../store/api-actions';
-import { PostReviewType, State } from '../../types/types';
+import { getReviewPostStatus } from '../../store/reducers/reviews/reviews-selectors';
+import { PostReviewType } from '../../types/types';
 
 type OfferParams = {
   id: string;
 };
 
-const mapStateToProps = ({isPostSuccessfull}: State) => ({
-  isPostSuccessfull,
-});
+const MIN_REVIEW_LENGTH = 50;
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  onReviewPost: (id, review) => postReview(id, review),
-  clearPostStatus: clearPostReviewStatus,
-}, dispatch);
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function ReviewForm({onReviewPost, isPostSuccessfull, clearPostStatus}: PropsFromRedux):JSX.Element {
+function ReviewForm():JSX.Element {
   const params = useParams<OfferParams>();
   const id = parseInt(params.id, 10);
+
+  const isPostSuccessfull = useSelector(getReviewPostStatus);
+
+  const dispatch = useDispatch();
 
   const [review, setReview] = useState<PostReviewType>({
     comment: '',
@@ -33,7 +26,7 @@ function ReviewForm({onReviewPost, isPostSuccessfull, clearPostStatus}: PropsFro
   });
 
   const {comment, rating} = review;
-  const isSubmitDisabled = comment.length < 50 || rating === 0;
+  const isSubmitDisabled = comment.length < MIN_REVIEW_LENGTH || rating === 0;
 
   const handleStarClick = (evt: ChangeEvent<HTMLInputElement>) => {
     setReview({
@@ -51,7 +44,7 @@ function ReviewForm({onReviewPost, isPostSuccessfull, clearPostStatus}: PropsFro
 
   const handleSubmit = (evt: SyntheticEvent) => {
     evt.preventDefault();
-    onReviewPost(id, review);
+    dispatch(postReview(id, review));
   };
 
   useEffect(() => {
@@ -60,9 +53,9 @@ function ReviewForm({onReviewPost, isPostSuccessfull, clearPostStatus}: PropsFro
         comment: '',
         rating: 0,
       });
-      clearPostStatus();
+      dispatch(clearPostReviewStatus());
     }
-  }, [clearPostStatus, isPostSuccessfull]);
+  }, [dispatch, isPostSuccessfull]);
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
@@ -121,5 +114,4 @@ function ReviewForm({onReviewPost, isPostSuccessfull, clearPostStatus}: PropsFro
   );
 }
 
-export {ReviewForm};
-export default connector(ReviewForm);
+export default ReviewForm;

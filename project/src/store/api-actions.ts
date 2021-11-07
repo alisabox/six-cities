@@ -1,5 +1,5 @@
 import {OffersType, ThunkActionResult, AuthData, ReviewsType, PostReviewType} from '../types/types';
-import {getNearByOffers, getOfferByID, getOffers, getReviews, postReviewAction, redirectToRoute, requireAuthorization, requireLogout} from './action';
+import {getNearByOffers, getOfferByID, getOffers, getReviewsAction, postReviewAction, redirectToRoute, requireAuthorization, requireLogout} from './action';
 import {saveToken, dropToken, Token} from '../services/token';
 import {APIRoute, AuthorizationStatus, AppRoute} from '../const/const';
 import {toast} from 'react-toastify';
@@ -28,10 +28,10 @@ export const fetchNearByOffersAction = (id: number): ThunkActionResult =>
     dispatch(getNearByOffers(data));
   };
 
-export const fetchReviews = (id: number): ThunkActionResult =>
+export const fetchReviewsAction = (id: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<ReviewsType[]>(`${APIRoute.REVIEWS}/${id}`);
-    dispatch(getReviews(data));
+    dispatch(getReviewsAction(data));
   };
 
 export const postReview = (id: number, review: PostReviewType): ThunkActionResult =>
