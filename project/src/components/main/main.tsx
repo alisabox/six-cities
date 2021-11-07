@@ -1,12 +1,12 @@
-import {MouseEvent} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import { MouseEvent } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { getCity } from '../../store/action';
-import {cities} from '../../const/const';
-import {OffersType} from '../../types/types';
+import { cities } from '../../const/const';
+import { OffersType } from '../../types/types';
 import OffersList from '../offers-list/offers-list';
 import MainScreenEmpty from '../main-empty/main-empty';
 import Header from '../header/header';
-import { getSelectedCity } from '../../store/reducers/offers/offers-selectors';
+import { getOffersInSelectedCity, getSelectedCity } from '../../store/reducers/offers/offers-selectors';
 
 
 type MainScreenProps = {
@@ -16,7 +16,7 @@ type MainScreenProps = {
 function MainScreen({offers}:MainScreenProps):JSX.Element {
   const selectedCity = useSelector(getSelectedCity);
 
-  const offersInSelectedCity = offers.filter((offer) =>  offer.city.name === selectedCity);
+  const offersInSelectedCity = useSelector(getOffersInSelectedCity(selectedCity));
 
   const dispatch = useDispatch();
 

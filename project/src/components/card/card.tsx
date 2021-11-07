@@ -1,7 +1,12 @@
-import {memo, MouseEvent} from 'react';
-import {Link} from 'react-router-dom';
-import {AppRoute, RoomTypes, MAX_RATING, Screen, BasicCardImageSize, FavoriteCardImageSize} from '../../const/const';
-import {OffersType} from '../../types/types';
+import { memo, MouseEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { AppRoute, RoomTypes, MAX_RATING, Screen, BasicCardImageSize, FavoriteCardImageSize, AuthorizationStatus } from '../../const/const';
+import { redirectToRoute } from '../../store/action';
+import { addToFavorites, removeFromFavorites } from '../../store/api-actions';
+import { getFavoriteOffersMemo } from '../../store/reducers/offers/offers-selectors';
+import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
+import { OffersType } from '../../types/types';
 
 type CardProps = {
   offer: OffersType;
@@ -12,7 +17,9 @@ type CardProps = {
 }
 
 function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}:CardProps):JSX.Element {
-  const {isPremium, previewImage, title, price, isFavorite, rating, type, id} = offer;
+  const {isPremium, previewImage, title, price, rating, type, id} = offer;
+  const isFavorite = useSelector(getFavoriteOffersMemo(id));
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
   const handleHover = (evt: MouseEvent<HTMLElement>) => {
     if (!isMainScreen) {
@@ -27,6 +34,17 @@ function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}
   const handleBlur = () => {
     if (onHover) {
       onHover(undefined);
+    }
+  };
+
+  const dispatch = useDispatch();
+  const handleFavoriteClick = () => {
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      dispatch(redirectToRoute(AppRoute.LOGIN));
+    } else if (isFavorite) {
+      dispatch(removeFromFavorites(id));
+    } else {
+      dispatch(addToFavorites(id));
     }
   };
 
@@ -70,7 +88,11 @@ function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`} type="button">
+          <button
+            className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`}
+            type="button"
+            onClick={handleFavoriteClick}
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>

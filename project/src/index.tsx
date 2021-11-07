@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {configureStore} from '@reduxjs/toolkit';
-import {createAPI} from './services/api';
-import {Provider} from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { createAPI } from './services/api';
+import { Provider } from 'react-redux';
 import App from './components/app/app';
-import {rootReducer} from './store/reducers/root-reducer';
-import {requireAuthorization} from './store/action';
-import {fetchDataAction, checkAuthAction} from './store/api-actions';
-import {AuthorizationStatus} from './const/const';
-import {redirect} from './store/middleware/redirect';
-import {ToastContainer} from 'react-toastify';
+import { rootReducer } from './store/reducers/root-reducer';
+import { requireAuthorization } from './store/action';
+import { fetchDataAction, checkAuthAction, fetchFavoriteOffers } from './store/api-actions';
+import { AuthorizationStatus } from './const/const';
+import { redirect } from './store/middleware/redirect';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const api = createAPI(
@@ -28,6 +28,7 @@ const store = configureStore({
 
 store.dispatch(checkAuthAction());
 store.dispatch(fetchDataAction());
+store.dispatch(fetchFavoriteOffers());
 
 ReactDOM.render(
   <React.StrictMode>

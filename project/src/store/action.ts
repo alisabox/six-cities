@@ -1,6 +1,6 @@
-import {createAction} from '@reduxjs/toolkit';
+import { createAction } from '@reduxjs/toolkit';
 import { OffersType, ReviewsType } from '../types/types';
-import {ActionType, AuthorizationStatus} from '../const/const';
+import { ActionType, AuthorizationStatus } from '../const/const';
 
 export const getCity = createAction(
   ActionType.GetCityAction,
@@ -59,6 +59,35 @@ export const postReviewAction = createAction(
 );
 
 export const clearPostReviewStatus = createAction(ActionType.ClearPostReviewStatus);
+
+export const getFavoriteOffers = createAction(
+  ActionType.GetFavoriteOffers,
+  (favoriteOffers: OffersType[]) => ({
+    payload: {
+      favoriteOffers,
+    },
+  }),
+);
+
+export const clearFavoriteOffers = createAction(ActionType.ClearFavoriteOffers);
+
+export const addToFavoriteOffers = createAction(
+  ActionType.AddToFavoriteOffers,
+  (favoriteOffer: OffersType) => ({
+    payload: {
+      favoriteOffer,
+    },
+  }),
+);
+
+export const removeFromFavoriteOffers = createAction(
+  ActionType.RemoveFromFavoriteOffers,
+  (favoriteOffer: OffersType) => ({
+    payload: {
+      favoriteOffer,
+    },
+  }),
+);
 
 export const requireAuthorization = createAction(
   ActionType.RequireAuthorization,

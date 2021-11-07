@@ -29,6 +29,20 @@ export const MAX_RATING = 5;
 
 export const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
+const getRandomIndex = (min: number, max: number): number => {
+  if (min < 0 || max < 0) {
+    return 0;
+  } else if (min > max) {
+    [min, max] = [max, min];
+  }
+  return Math.round(Math.random() * (max - min) + min);
+};
+
+export const getRandomCity = (): string => {
+  const index = getRandomIndex(0, cities.length - 1);
+  return cities[index];
+};
+
 export const URL_MARKER_DEFAULT = './img/pin.svg';
 
 export const URL_MARKER_CURRENT = './img/pin-active.svg';
@@ -75,6 +89,7 @@ export const APIRoute = {
   LOGIN: '/login',
   LOGOUT: '/logout',
   REVIEWS: '/comments',
+  FAVORITE:  '/favorite',
 };
 
 export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean =>
@@ -134,7 +149,16 @@ export enum ActionType {
   GetReviews = 'OFFERS/GET_REVIEWS',
   PostReview = 'OFFERS/POST_REVIEW',
   ClearPostReviewStatus = 'OFFERS/CLEAR_POST_REVIEW_STATUS',
+  GetFavoriteOffers = 'FAVORITE/GET_FAVORITE_OFFERS',
+  ClearFavoriteOffers = 'FAVORITE/CLEAR_FAVORITE_OFFERS',
+  AddToFavoriteOffers = 'FAVORITE/ADD_TO_FAVORITE',
+  RemoveFromFavoriteOffers = 'FAVORITE/REMOVE_FROM_FAVORITE',
   RequireAuthorization = 'USER/REQUIRE_AUTHORIZATION',
   RequireLogout = 'USER/REQUIRE_LOGOUT',
   RedirectToRoute = 'USER/REDIRECT',
 }
+
+export const TypeOfFavoriteAction = {
+  ADD_TO_FAVOTITE: 1,
+  REMOVE_FROM_FAVOTITE:  0,
+};

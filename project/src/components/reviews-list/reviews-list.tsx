@@ -1,7 +1,7 @@
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import ReviewForm from '../review-form/review-form';
-import {ReviewsType} from '../../types/types';
-import {AuthorizationStatus, MAX_RATING} from '../../const/const';
+import { ReviewsType } from '../../types/types';
+import { AuthorizationStatus, MAX_RATING } from '../../const/const';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
 
 type ReviewsListProps = {

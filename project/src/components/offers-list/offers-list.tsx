@@ -1,5 +1,5 @@
 import Card from '../card/card';
-import {OffersType} from '../../types/types';
+import { OffersType } from '../../types/types';
 import Map from '../map/map';
 import { useCallback, useEffect, useState } from 'react';
 import SortVariants from '../sort-variants/sort-variants';
