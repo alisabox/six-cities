@@ -1,8 +1,8 @@
-import {Action} from 'redux';
+import { Action } from 'redux';
 import { ActionType, AuthorizationStatus } from '../const/const';
-import {ThunkAction, ThunkDispatch} from 'redux-thunk';
-import {AxiosInstance} from 'axios';
-import {RootState} from '../store/reducers/root-reducer';
+import { ThunkAction, ThunkDispatch}  from 'redux-thunk';
+import { AxiosInstance } from 'axios';
+import { RootState } from '../store/reducers/root-reducer';
 
 export type LocationType = {
   latitude: number;
@@ -60,16 +60,8 @@ export type PostReviewType = {
   rating: number;
 }
 
-export type StateOld = {
-  selectedCity: string;
-  offers: OffersType[];
-  authorizationStatus: AuthorizationStatus,
-  isDataLoaded: boolean;
-  userEmail?: string;
-  offer?: OffersType;
-  nearbyOffers?: OffersType[];
-  reviews?: ReviewsType[];
-  isPostSuccessfull: boolean;
+export type FavoriteCitiesType = {
+  [key: CityType['name']]: OffersType[];
 }
 
 export type State = RootState;
@@ -139,3 +131,5 @@ export type AuthData = {
   login: string;
   password: string;
 };
+
+export type ReselectType<S> = (state: State) => S;

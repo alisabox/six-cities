@@ -1,5 +1,5 @@
-import {useState, ChangeEvent, SyntheticEvent, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import { useState, ChangeEvent, SyntheticEvent, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { clearPostReviewStatus } from '../../store/action';
 import { postReview } from '../../store/api-actions';
@@ -11,6 +11,7 @@ type OfferParams = {
 };
 
 const MIN_REVIEW_LENGTH = 50;
+const MAX_REVIEW_LENGTH = 300;
 
 function ReviewForm():JSX.Element {
   const params = useParams<OfferParams>();
@@ -100,6 +101,7 @@ function ReviewForm():JSX.Element {
         placeholder="Tell how was your stay, what you like and what can be improved"
         onChange={handleTextareaChange}
         value={comment}
+        maxLength={MAX_REVIEW_LENGTH}
       >
       </textarea>
       <div className="reviews__button-wrapper">

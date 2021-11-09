@@ -1,18 +1,14 @@
-import {cities} from '../../const/const';
-import {OffersType} from '../../types/types';
+import { useSelector } from 'react-redux';
+import { cities } from '../../const/const';
+import { getFavoriteOffers } from '../../store/reducers/offers/offers-selectors';
+import { FavoriteCitiesType } from '../../types/types';
 import Card from '../card/card';
+import FavoritesScreenEmpty from '../favorites-empty/favorites-empty';
 import Header from '../header/header';
 
-type FavoritesScreenProps = {
-  favoriteOffers: OffersType[];
-}
-
-type MyGroupType = {
-  [key:string]: OffersType[];
-}
-
-function FavoritesScreen({favoriteOffers}:FavoritesScreenProps):JSX.Element {
-  const favoriteCities:MyGroupType = {};
+function FavoritesScreen():JSX.Element {
+  const favoriteOffers = useSelector(getFavoriteOffers);
+  const favoriteCities: FavoriteCitiesType = {};
   cities.map((city) => {
     const cityFavoriteOffers = favoriteOffers.filter((offer) => offer.city.name === city);
     if (cityFavoriteOffers.length > 0) {
@@ -20,6 +16,10 @@ function FavoritesScreen({favoriteOffers}:FavoritesScreenProps):JSX.Element {
     }
     return null;
   });
+
+  if (favoriteOffers.length === 0) {
+    return <FavoritesScreenEmpty />;
+  }
 
   return (
     <div className="page">

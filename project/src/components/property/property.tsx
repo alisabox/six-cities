@@ -1,20 +1,24 @@
-import {useParams} from 'react-router-dom';
-import {useSelector, useDispatch} from 'react-redux';
-import {RoomTypes, MAX_RATING} from '../../const/const';
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RoomTypes, MAX_RATING, AuthorizationStatus, AppRoute } from '../../const/const';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import Card from '../card/card';
 import { useEffect } from 'react';
-import { fetchNearByOffersAction, fetchOfferByIDAction, fetchReviewsAction } from '../../store/api-actions';
-import { clearOfferByID } from '../../store/action';
+import { addToFavorites, fetchNearByOffersAction, fetchOfferByIDAction, fetchReviewsAction, removeFromFavorites } from '../../store/api-actions';
+import { clearOfferByID, redirectToRoute } from '../../store/action';
 import LoadingScreen from '../loading-screen/loading-screen';
 import Header from '../header/header';
-import { getNearbyOffers, getOfferByID } from '../../store/reducers/offers/offers-selectors';
+import { getFavoriteOffersMemo, getNearbyOffers, getOfferByID } from '../../store/reducers/offers/offers-selectors';
 import { getReviews } from '../../store/reducers/reviews/reviews-selectors';
+import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
+import { ReviewsType } from '../../types/types';
 
 type OfferParams = {
   id: string;
 };
+
+const MAX_NUMBER_OF_REVIEWS = 10;
 
 function PropertyScreen():JSX.Element {
   const params = useParams<OfferParams>();
@@ -22,9 +26,28 @@ function PropertyScreen():JSX.Element {
 
   const offer = useSelector(getOfferByID);
   const nearbyOffers = useSelector(getNearbyOffers);
-  const reviews = useSelector(getReviews);
+  const allReviews = useSelector(getReviews);
+  const isFavorite = useSelector(getFavoriteOffersMemo(id));
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+
+  let reviews: ReviewsType[] = [];
+  if (allReviews && allReviews.length < MAX_NUMBER_OF_REVIEWS) {
+    reviews = allReviews;
+  } else if (allReviews && allReviews.length > MAX_NUMBER_OF_REVIEWS) {
+    reviews = allReviews.slice(allReviews.length-MAX_NUMBER_OF_REVIEWS, allReviews.length);
+  }
 
   const dispatch = useDispatch();
+
+  const handleFavoriteClick = () => {
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      dispatch(redirectToRoute(AppRoute.LOGIN));
+    } else if (isFavorite) {
+      dispatch(removeFromFavorites(id));
+    } else {
+      dispatch(addToFavorites(id));
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchOfferByIDAction(id));
@@ -40,7 +63,7 @@ function PropertyScreen():JSX.Element {
     );
   }
 
-  const {images, isPremium, title, isFavorite, rating, type, bedrooms, maxAdults, price, goods, host, description} = offer;
+  const {images, isPremium, title, rating, type, bedrooms, maxAdults, price, goods, host, description} = offer;
   const {avatarUrl, isPro, name} = host;
 
   return (
@@ -72,7 +95,11 @@ function PropertyScreen():JSX.Element {
               }
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
-                <button className={`property__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`} type="button">
+                <button
+                  className={`property__bookmark-button ${isFavorite ? 'property__bookmark-button--active' : ''} button`}
+                  type="button"
+                  onClick={handleFavoriteClick}
+                >
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>

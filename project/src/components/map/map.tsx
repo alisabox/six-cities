@@ -1,8 +1,8 @@
-import {useRef, useEffect, memo} from 'react';
-import {Icon, Marker} from 'leaflet';
+import { useRef, useEffect, memo } from 'react';
+import { Icon, Marker } from 'leaflet';
 import useMap from '../../hooks/useMap';
-import {OffersType} from '../../types/types';
-import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../const/const';
+import { OffersType } from '../../types/types';
+import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const/const';
 import 'leaflet/dist/leaflet.css';
 
 type MapProps = {

@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { ReviewsState } from '../../../types/types';
-import { adaptReviewsToClient} from '../../../const/const';
+import { adaptReviewsToClient } from '../../../const/const';
 import { clearPostReviewStatus, getReviewsAction, postReviewAction } from '../../action';
 
 export const initialState: ReviewsState = {

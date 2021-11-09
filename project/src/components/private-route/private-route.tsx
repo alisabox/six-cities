@@ -1,7 +1,7 @@
-import {Route, Redirect} from 'react-router-dom';
-import {RouteProps} from 'react-router-dom';
-import {useSelector} from 'react-redux';
-import {AppRoute, AuthorizationStatus} from '../../const/const';
+import { Route, Redirect } from 'react-router-dom';
+import { RouteProps } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { AppRoute, AuthorizationStatus } from '../../const/const';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
 
 type PrivateRouteProps = RouteProps & {

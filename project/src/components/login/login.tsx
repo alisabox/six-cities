@@ -1,9 +1,17 @@
-import {useRef, FormEvent} from 'react';
-import { useDispatch} from 'react-redux';
-import {loginAction} from '../../store/api-actions';
+import { useRef, FormEvent, MouseEvent } from 'react';
+import { useDispatch, useSelector} from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus, getRandomCity } from '../../const/const';
+import { getCity, redirectToRoute } from '../../store/action';
+import { loginAction } from '../../store/api-actions';
+import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
 import Header from '../header/header';
 
+
+const randomCity = getRandomCity();
+
 function LoginScreen():JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
   const dispatch = useDispatch();
 
   const loginRef = useRef<HTMLInputElement | null>(null);
@@ -19,6 +27,16 @@ function LoginScreen():JSX.Element {
       }));
     }
   };
+
+  const hadnleRandomCityClick = (evt: MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    dispatch(getCity(randomCity));
+    dispatch(redirectToRoute(AppRoute.ROOT));
+  };
+
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    return <Redirect to={AppRoute.ROOT} />;
+  }
 
   return (
     <div className="page page--gray page--login">
@@ -61,8 +79,8 @@ function LoginScreen():JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="/">
-                <span>Amsterdam</span>
+              <a className="locations__item-link" href="/" onClick={hadnleRandomCityClick}>
+                <span>{randomCity}</span>
               </a>
             </div>
           </section>
