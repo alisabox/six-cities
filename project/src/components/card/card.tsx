@@ -1,11 +1,10 @@
 import { memo, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AppRoute, RoomTypes, MAX_RATING, Screen, BasicCardImageSize, FavoriteCardImageSize, AuthorizationStatus } from '../../const/const';
-import { redirectToRoute } from '../../store/action';
-import { addToFavorites, removeFromFavorites } from '../../store/api-actions';
+import { AppRoute, RoomTypes, MAX_RATING, Screen, BasicCardImageSize, FavoriteCardImageSize } from '../../const/const';
 import { getFavoriteOffersMemo } from '../../store/reducers/offers/offers-selectors';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
+import { handleFavoriteClickAction } from '../../utils/utils';
 import { OffersType } from '../../types/types';
 
 type CardProps = {
@@ -38,15 +37,9 @@ function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}
   };
 
   const dispatch = useDispatch();
-  const handleFavoriteClick = () => {
-    if (authorizationStatus !== AuthorizationStatus.Auth) {
-      dispatch(redirectToRoute(AppRoute.LOGIN));
-    } else if (isFavorite) {
-      dispatch(removeFromFavorites(id));
-    } else {
-      dispatch(addToFavorites(id));
-    }
-  };
+
+  const handleFavoriteClick = () => dispatch(handleFavoriteClickAction(authorizationStatus, isFavorite, id));
+
 
   const screenClass = () => {
     switch(true) {
