@@ -10,8 +10,8 @@ export const makeFakeOffers = (): OffersType => ({
   bedrooms: number(),
   city: {
     location: {
-      latitude: parseInt(address.latitude(), 10),
-      longitude:  parseInt(address.longitude(), 10),
+      latitude: parseFloat(address.latitude()),
+      longitude:  parseFloat(address.longitude()),
       zoom: number(),
     },
     name: getRandomCity(),
@@ -29,8 +29,8 @@ export const makeFakeOffers = (): OffersType => ({
   'is_favorite': datatype.boolean(),
   'is_premium': datatype.boolean(),
   location: {
-    latitude: parseInt(address.latitude(), 10),
-    longitude:  parseInt(address.longitude(), 10),
+    latitude: parseFloat(address.latitude()),
+    longitude:  parseFloat(address.longitude()),
     zoom: number(),
   },
   'max_adults': number(),
