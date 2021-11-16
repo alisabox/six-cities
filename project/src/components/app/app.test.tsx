@@ -12,7 +12,29 @@ const offers = [adaptToClient(makeFakeOffers())];
 
 const history = createMemoryHistory();
 describe('Application Routing', () => {
-  it('should render main screen when user navigate to "/"', () => {
+
+  it('should render "Loading" screen when data is loading', () => {
+    const store = mockStore({
+      OFFERS: {isDataLoaded: false},
+      USER: {authorizationStatus: AuthorizationStatus.Unknown},
+    });
+
+    const fakeApp = (
+      <Provider store={store}>
+        <Router history={history}>
+          <App />
+        </Router>
+      </Provider>
+    );
+    history.push(AppRoute.ROOT);
+    render(fakeApp);
+
+    expect(screen.queryByText(/The page is loading/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Sign in/i)).toBeNull();
+    expect(screen.queryByText(/Sign out/i)).toBeNull();
+  });
+
+  it('should render "Main" screen when user navigate to "/"', () => {
     const store = mockStore({
       OFFERS: {selectedCity: '', offers: [], isDataLoaded: true},
       USER: {authorizationStatus: AuthorizationStatus.Auth, userEmail: 'test@test.com'},

@@ -23,7 +23,7 @@ describe('Middleware: redirect', () => {
     fakeHistory.push('');
   });
 
-  it('should be redirect to /login', () => {
+  it('should redirect to /login', () => {
     store.dispatch(redirectToRoute(AppRoute.LOGIN));
     expect(fakeHistory.location.pathname).toBe(AppRoute.LOGIN);
     expect(store.getActions()).toEqual([
@@ -31,7 +31,7 @@ describe('Middleware: redirect', () => {
     ]);
   });
 
-  it('should not to be redirect /lose because bad action', () => {
+  it('should not redirect to / because bad action', () => {
     store.dispatch({type: 'UNKNOWN_ACTION', payload: AppRoute.ROOT});
     expect(fakeHistory.location.pathname).not.toBe(AppRoute.ROOT);
   });

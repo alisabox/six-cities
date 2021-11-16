@@ -13,13 +13,15 @@ history.push(AppRoute.FAVORITE);
 
 const favoriteOffer = makeFakeOffers();
 
-const store = mockStore({
-  USER: {authorizationStatus: AuthorizationStatus.Auth, userEmail: 'test@test.com'},
-  OFFERS: {favoriteOffers: [favoriteOffer]},
-});
 
-describe('Component: FavoritesScreenEmpty', () => {
+describe('Component: FavoritesScreen', () => {
   it('should render correctly', () => {
+
+    const store = mockStore({
+      USER: {authorizationStatus: AuthorizationStatus.Auth, userEmail: 'test@test.com'},
+      OFFERS: {favoriteOffers: [favoriteOffer]},
+    });
+
     const {getByText} = render (
       <Provider store={store}>
         <Router history={history}>
@@ -31,5 +33,25 @@ describe('Component: FavoritesScreenEmpty', () => {
     expect(getByText(favoriteOffer.city.name)).toBeInTheDocument();
     expect(getByText(/Sign out/i)).toBeInTheDocument();
     expect(getByText(/test@test.com/i)).toBeInTheDocument();
+  });
+  it('should render FavoritesScreenEmpty when there are no favorite offers', () => {
+
+    const store = mockStore({
+      USER: {authorizationStatus: AuthorizationStatus.Auth, userEmail: 'test@test.com'},
+      OFFERS: {favoriteOffers: []},
+    });
+
+    const {getByText} = render (
+      <Provider store={store}>
+        <Router history={history}>
+          <FavoritesScreen />
+        </Router>
+      </Provider>,
+    );
+
+    expect(getByText('Favorites (empty)')).toBeInTheDocument();
+    expect(getByText(/Nothing yet saved./i)).toBeInTheDocument();
+    expect(getByText(/Sign out/i)).toBeInTheDocument();
+    expect(getByText(/Save properties to narrow down search or plan your future trips./i)).toBeInTheDocument();
   });
 });

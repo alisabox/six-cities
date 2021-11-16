@@ -24,8 +24,9 @@ describe('Component: FavoritesScreenEmpty', () => {
         </Router>
       </Provider>,
     );
-    const headerElement = getByText('Favorites (empty)');
 
-    expect(headerElement).toBeInTheDocument();
+    expect(getByText('Favorites (empty)')).toBeInTheDocument();
+    expect(getByText(/Nothing yet saved./i)).toBeInTheDocument();
+    expect(getByText(/Save properties to narrow down search or plan your future trips./i)).toBeInTheDocument();
   });
 });
