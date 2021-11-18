@@ -5,7 +5,7 @@ import { requireAuthorization, requireLogout } from '../../action';
 
 export const initialState: UserState = {
   authorizationStatus: AuthorizationStatus.Unknown,
-  userEmail: '',
+  userEmail: undefined,
 };
 
 export const userProcess = createReducer(initialState, (builder) => {
@@ -16,5 +16,6 @@ export const userProcess = createReducer(initialState, (builder) => {
     })
     .addCase(requireLogout, (state) => {
       state.authorizationStatus = AuthorizationStatus.NoAuth;
+      state.userEmail = initialState.userEmail;
     });
 });

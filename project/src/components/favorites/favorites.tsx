@@ -1,10 +1,13 @@
-import { useSelector } from 'react-redux';
-import { cities } from '../../const/const';
+import { MouseEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { cities, AppRoute } from '../../const/const';
 import { getFavoriteOffers } from '../../store/reducers/offers/offers-selectors';
+import { getCity, redirectToRoute } from '../../store/action';
 import { FavoriteCitiesType } from '../../types/types';
 import Card from '../card/card';
 import FavoritesScreenEmpty from '../favorites-empty/favorites-empty';
 import Header from '../header/header';
+import Footer from '../footer/footer';
 
 function FavoritesScreen():JSX.Element {
   const favoriteOffers = useSelector(getFavoriteOffers);
@@ -16,6 +19,17 @@ function FavoritesScreen():JSX.Element {
     }
     return null;
   });
+
+  const dispatch = useDispatch();
+
+  const handleCityRedirect = (evt: MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    const city = evt.currentTarget.getAttribute('data-city');
+    if (city) {
+      dispatch(getCity(city));
+    }
+    dispatch(redirectToRoute(AppRoute.ROOT));
+  };
 
   if (favoriteOffers.length === 0) {
     return <FavoritesScreenEmpty />;
@@ -34,7 +48,7 @@ function FavoritesScreen():JSX.Element {
                   <li key={entry[0]} className="favorites__locations-items">
                     <div className="favorites__locations locations locations--current">
                       <div className="locations__item">
-                        <a className="locations__item-link" href="/">
+                        <a className="locations__item-link" href="/" onClick={handleCityRedirect} data-city={entry[0]}>
                           <span>{entry[0]}</span>
                         </a>
                       </div>
@@ -51,11 +65,7 @@ function FavoritesScreen():JSX.Element {
           </section>
         </div>
       </main>
-      <footer className="footer container">
-        <a className="footer__logo-link" href="main.html">
-          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-        </a>
-      </footer>
+      <Footer />
     </div>
   );
 }

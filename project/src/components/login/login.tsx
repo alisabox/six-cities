@@ -28,7 +28,7 @@ function LoginScreen():JSX.Element {
     }
   };
 
-  const hadnleRandomCityClick = (evt: MouseEvent<HTMLElement>) => {
+  const handleRandomCityClick = (evt: MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     dispatch(getCity(randomCity));
     dispatch(redirectToRoute(AppRoute.ROOT));
@@ -54,6 +54,7 @@ function LoginScreen():JSX.Element {
                   className="login__input form__input"
                   type="email"
                   name="email"
+                  data-testid="email"
                   placeholder="Email"
                   required
                 />
@@ -65,6 +66,7 @@ function LoginScreen():JSX.Element {
                   className="login__input form__input"
                   type="password"
                   name="password"
+                  data-testid="password"
                   placeholder="Password"
                   required
                 />
@@ -79,7 +81,7 @@ function LoginScreen():JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="/" onClick={hadnleRandomCityClick}>
+              <a className="locations__item-link" href="/" onClick={handleRandomCityClick}>
                 <span>{randomCity}</span>
               </a>
             </div>

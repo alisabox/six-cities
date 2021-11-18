@@ -1,18 +1,19 @@
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RoomTypes, MAX_RATING, AuthorizationStatus, AppRoute } from '../../const/const';
+import { RoomTypes, MAX_RATING } from '../../const/const';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import Card from '../card/card';
 import { useEffect } from 'react';
-import { addToFavorites, fetchNearByOffersAction, fetchOfferByIDAction, fetchReviewsAction, removeFromFavorites } from '../../store/api-actions';
-import { clearOfferByID, redirectToRoute } from '../../store/action';
+import { fetchNearByOffersAction, fetchOfferByIDAction, fetchReviewsAction } from '../../store/api-actions';
+import { clearOfferByID } from '../../store/action';
 import LoadingScreen from '../loading-screen/loading-screen';
 import Header from '../header/header';
 import { getFavoriteOffersMemo, getNearbyOffers, getOfferByID } from '../../store/reducers/offers/offers-selectors';
 import { getReviews } from '../../store/reducers/reviews/reviews-selectors';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
 import { ReviewsType } from '../../types/types';
+import { handleFavoriteClickAction } from '../../utils/utils';
 
 type OfferParams = {
   id: string;
@@ -39,15 +40,7 @@ function PropertyScreen():JSX.Element {
 
   const dispatch = useDispatch();
 
-  const handleFavoriteClick = () => {
-    if (authorizationStatus !== AuthorizationStatus.Auth) {
-      dispatch(redirectToRoute(AppRoute.LOGIN));
-    } else if (isFavorite) {
-      dispatch(removeFromFavorites(id));
-    } else {
-      dispatch(addToFavorites(id));
-    }
-  };
+  const handleFavoriteClick = () => dispatch(handleFavoriteClickAction(authorizationStatus, isFavorite, id));
 
   useEffect(() => {
     dispatch(fetchOfferByIDAction(id));
@@ -77,7 +70,7 @@ function PropertyScreen():JSX.Element {
               {
                 images.map((image) =>  (
                   <div key={image} className="property__image-wrapper">
-                    <img className="property__image" src={image} alt="Studio" />
+                    <img className="property__image" src={image} alt="Property" />
                   </div>
                 ))
               }

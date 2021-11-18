@@ -16,9 +16,9 @@ export type CityType = {
 }
 
 export type UserType = {
-  avatarUrl: string;
+  avatarUrl?: string;
   id: number;
-  isPro: boolean;
+  isPro?: boolean;
   name: string;
   ['avatar_url']?: string,
   ['is_pro']?: boolean,
@@ -32,11 +32,11 @@ export type OffersType = {
   host: UserType;
   id: number;
   images: string[];
-  isFavorite: boolean;
-  isPremium: boolean;
+  isFavorite?: boolean;
+  isPremium?: boolean;
   location: LocationType;
-  maxAdults: number,
-  previewImage: string;
+  maxAdults?: number,
+  previewImage?: string;
   price: number,
   rating: number,
   title: string,
