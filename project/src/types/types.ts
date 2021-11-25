@@ -1,6 +1,6 @@
 import { Action } from 'redux';
-import { ActionType, AuthorizationStatus } from '../const/const';
-import { ThunkAction, ThunkDispatch}  from 'redux-thunk';
+import { AuthorizationStatus } from '../const/const';
+import { ThunkAction}  from 'redux-thunk';
 import { AxiosInstance } from 'axios';
 import { RootState } from '../store/reducers/root-reducer';
 
@@ -82,50 +82,10 @@ export type OffersState = {
 
 export type ReviewsState = {
   reviews?: ReviewsType[];
-  isPostSuccessfull: boolean;
-}
-
-export type GetCityAction = {
-  type: ActionType.GetCityAction;
-  payload: string;
-}
-
-export type GetOffersAction = {
-  type: ActionType.GetOffersAction;
-  payload: OffersType[];
-}
-
-export type GetOfferByIDAction = {
-  type: ActionType.GetOfferByIDAction;
-  payload: OffersType;
-}
-
-export type ClearOfferByIDAction = {
-  type: ActionType.ClearOfferByIDAction;
-}
-
-export type GetNearByOffers = {
-  type: ActionType.GetNearByOffers;
-  payload: OffersType[];
-}
-
-export type GetReviews = {
-  type: ActionType.GetReviews;
-  payload: ReviewsType[];
-}
-
-export type PostReview = {
-  type: ActionType.PostReview;
-  payload: ReviewsType[];
-}
-
-export type ClearPostReviewStatus = {
-  type: ActionType.ClearPostReviewStatus;
+  postSuccess: boolean;
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;
-
-export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Action>;
 
 export type AuthData = {
   login: string;

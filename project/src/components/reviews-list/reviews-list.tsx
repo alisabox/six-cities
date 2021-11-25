@@ -11,13 +11,14 @@ type ReviewsListProps = {
 function ReviewsList({reviews}: ReviewsListProps):JSX.Element {
 
   const authorizationStatus = useSelector(getAuthorizationStatus);
+  const sortedReviews = reviews.slice().sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
 
   return (
     <section className="property__reviews reviews">
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews?.length}</span></h2>
       <ul className="reviews__list">
         {
-          reviews.map((review) => {
+          sortedReviews.map((review) => {
             const date = new Date(review.date);
             const dateTime = date.toISOString().substring(0,10);
             const monthYear = date.toLocaleString('default', { month: 'long' , year: 'numeric'});

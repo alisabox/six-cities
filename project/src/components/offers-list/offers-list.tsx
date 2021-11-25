@@ -45,7 +45,7 @@ function OffersList({selectedCity, offers}:OffersProps):JSX.Element {
           <SortVariants onSortModeChange={onSortModeChange} selectedCity={selectedCity}/>
           <div className="cities__places-list places__list tabs__content">
             {sortedOffers.slice().map((offer:OffersType) =>
-              <Card key={offer.id} offer={offer} onHover={listItemHoverHandler} isMainScreen />,
+              <Card key={offer.id} offer={offer} listItemHoverHandler={listItemHoverHandler} isMainScreen />,
             )}
           </div>
         </section>

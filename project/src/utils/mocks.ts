@@ -25,7 +25,7 @@ export const makeFakeOffers = (): OffersType => ({
     name: name.findName(),
   },
   id: number(),
-  images: new Array(number({'min': 1, 'max': 5})).fill(null).map(() => imageUrl()),
+  images: new Array(number({'min': 1, 'max': 5})).fill(null).map(() => `${imageUrl()}/${number()}`),
   'is_favorite': datatype.boolean(),
   'is_premium': datatype.boolean(),
   location: {

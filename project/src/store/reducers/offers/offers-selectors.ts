@@ -8,6 +8,5 @@ export const getSelectedCity = (state: State): string => state[NameSpace.offers]
 export const getOfferByID = (state: State): OffersType |  undefined => state[NameSpace.offers].offer;
 export const getNearbyOffers = (state: State): OffersType[] |  undefined => state[NameSpace.offers].nearbyOffers;
 export const getFavoriteOffers = (state: State): OffersType[] => state[NameSpace.offers].favoriteOffers;
-export const clearFavoriteOffers = (state: State): OffersType[] => state[NameSpace.offers].favoriteOffers;
 export const getFavoriteOffersMemo = (id: number): ReselectType<boolean> => createSelector(getFavoriteOffers, (favoriteOffers) => favoriteOffers?.filter((item) => item.id === id).length > 0);
 export const getOffersInSelectedCity = (selectedCity: string): ReselectType<OffersType[]> => createSelector(getOffers, (offers) => (offers.filter((offer) =>  offer.city.name === selectedCity)));

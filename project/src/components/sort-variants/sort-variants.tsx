@@ -55,7 +55,7 @@ function SortVariants({onSortModeChange, selectedCity}: SortVariantsProps):JSX.E
   return (
     <form className="places__sorting" action="/" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span onClick={handleSortOpen} className="places__sorting-type" tabIndex={0}>
+      <span onClick={handleSortOpen} className="places__sorting-type" tabIndex={0} data-testid="selectSort">
         {selectSort}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>

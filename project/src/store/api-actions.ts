@@ -1,12 +1,8 @@
 import { OffersType, ThunkActionResult, AuthData, ReviewsType, PostReviewType } from '../types/types';
 import { getFavoriteOffers, getNearByOffers, getOfferByID, getOffers, getReviewsAction, postReviewAction, redirectToRoute, removeFromFavoriteOffers, requireAuthorization, requireLogout, clearFavoriteOffers, addToFavoriteOffers } from './action';
 import { saveToken, dropToken, Token } from '../services/token';
-import { APIRoute, AuthorizationStatus, AppRoute, TypeOfFavoriteAction } from '../const/const';
+import { APIRoute, AuthorizationStatus, AppRoute, TypeOfFavoriteAction, FailMessages } from '../const/const';
 import { toast } from 'react-toastify';
-
-const POST_FAIL_MESSAGE = 'Unable to send the message. Check your internet connection';
-const ADD_TO_FAVORITES_FAIL_MESSAGE = 'Unable to add to favorites. Check your internet connection';
-const REMOVE_FROM_FAVORITES_FAIL_MESSAGE = 'Unable to remove from favorites. Check your internet connection';
 
 export const fetchDataAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
@@ -42,7 +38,7 @@ export const postReview = (id: number, review: PostReviewType): ThunkActionResul
       const {data} = await api.post<ReviewsType[]>(`${APIRoute.REVIEWS}/${id}`, review);
       dispatch(postReviewAction(data));
     } catch {
-      toast.info(POST_FAIL_MESSAGE);
+      toast.info(FailMessages.POST);
     }
   };
 
@@ -57,20 +53,20 @@ export const fetchFavoriteOffers = (): ThunkActionResult =>
 export const addToFavorites = (id: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const {data} = await api.post<OffersType>(`${APIRoute.FAVORITE}/${id}/${TypeOfFavoriteAction.ADD_TO_FAVOTITE}`);
+      const {data} = await api.post<OffersType>(`${APIRoute.FAVORITE}/${id}/${TypeOfFavoriteAction.ADDITION_TO_FAVOTITE}`);
       dispatch(addToFavoriteOffers(data));
     } catch (error) {
-      toast.info(ADD_TO_FAVORITES_FAIL_MESSAGE);
+      toast.info(FailMessages.ADD_TO_FAVORITES);
     }
   };
 
 export const removeFromFavorites = (id: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const {data} = await api.post<OffersType>(`${APIRoute.FAVORITE}/${id}/${TypeOfFavoriteAction.REMOVE_FROM_FAVOTITE}`);
+      const {data} = await api.post<OffersType>(`${APIRoute.FAVORITE}/${id}/${TypeOfFavoriteAction.REMOVAL_FROM_FAVOTITE}`);
       dispatch(removeFromFavoriteOffers(data));
     } catch (error) {
-      toast.info(REMOVE_FROM_FAVORITES_FAIL_MESSAGE);
+      toast.info(FailMessages.REMOVE_FROM_FAVORITES);
     }
   };
 

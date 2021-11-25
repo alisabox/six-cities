@@ -20,6 +20,7 @@ type OfferParams = {
 };
 
 const MAX_NUMBER_OF_REVIEWS = 10;
+const MAX_NUMBER_OF_IMAGES = 6;
 
 function PropertyScreen():JSX.Element {
   const params = useParams<OfferParams>();
@@ -68,7 +69,7 @@ function PropertyScreen():JSX.Element {
           <div className="property__gallery-container container">
             <div className="property__gallery">
               {
-                images.map((image) =>  (
+                images.slice(0, MAX_NUMBER_OF_IMAGES).map((image, index) =>  (
                   <div key={image} className="property__image-wrapper">
                     <img className="property__image" src={image} alt="Property" />
                   </div>
@@ -101,10 +102,10 @@ function PropertyScreen():JSX.Element {
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{width: `${rating / MAX_RATING * 100}%`}}></span>
+                  <span style={{width: `${Math.round(rating) / MAX_RATING * 100}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
-                <span className="property__rating-value rating__value">{rating}</span>
+                <span className="property__rating-value rating__value">{Math.round(rating)}</span>
               </div>
               <ul className="property__features">
                 <li className="property__feature property__feature--entire">
@@ -165,7 +166,7 @@ function PropertyScreen():JSX.Element {
           <section className="property__map map">
             {
               nearbyOffers
-                ? <Map offers={nearbyOffers}/>
+                ? <Map offers={[offer, ...nearbyOffers]}/>
                 :  ''
             }
           </section>

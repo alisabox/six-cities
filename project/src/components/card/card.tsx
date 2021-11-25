@@ -9,13 +9,13 @@ import { OffersType } from '../../types/types';
 
 type CardProps = {
   offer: OffersType;
-  onHover?: (id?: number) => void;
+  listItemHoverHandler?: (id?: number) => void;
   isMainScreen?: boolean;
   isFavoriteScreen?: boolean;
   isPropertyScreen?: boolean;
 }
 
-function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}:CardProps):JSX.Element {
+function Card({offer, listItemHoverHandler, isMainScreen, isFavoriteScreen, isPropertyScreen}:CardProps):JSX.Element {
   const {isPremium, previewImage, title, price, rating, type, id} = offer;
   const isFavorite = useSelector(getFavoriteOffersMemo(id));
   const authorizationStatus = useSelector(getAuthorizationStatus);
@@ -25,14 +25,14 @@ function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}
       return;
     }
     evt.preventDefault();
-    if (onHover) {
-      onHover(offer.id);
+    if (listItemHoverHandler) {
+      listItemHoverHandler(offer.id);
     }
   };
 
   const handleBlur = () => {
-    if (onHover) {
-      onHover(undefined);
+    if (listItemHoverHandler) {
+      listItemHoverHandler(undefined);
     }
   };
 
@@ -41,7 +41,7 @@ function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}
   const handleFavoriteClick = () => dispatch(handleFavoriteClickAction(authorizationStatus, isFavorite, id));
 
 
-  const screenClass = () => {
+  const getScreenClass = () => {
     switch(true) {
       case isMainScreen:
         return Screen.MAIN;
@@ -55,7 +55,7 @@ function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}
   };
 
   return (
-    <article className={`${isMainScreen ? 'cities__place-card' : `${screenClass()}__card`} place-card`}
+    <article className={`${isMainScreen ? 'cities__place-card' : `${getScreenClass()}__card`} place-card`}
       onMouseOver={handleHover} onMouseOut={handleBlur}
     >
       {
@@ -66,7 +66,7 @@ function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}
           </div>
           : ''
       }
-      <div className={`${screenClass()}__image-wrapper place-card__image-wrapper`}>
+      <div className={`${getScreenClass()}__image-wrapper place-card__image-wrapper`}>
         <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer.id}}>
           <img className="place-card__image" src={previewImage}
             width={isFavoriteScreen ? FavoriteCardImageSize.WIDTH : BasicCardImageSize.WIDTH}
@@ -94,7 +94,7 @@ function Card({offer, onHover, isMainScreen, isFavoriteScreen, isPropertyScreen}
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${rating / MAX_RATING * 100}%`}}></span>
+            <span style={{width: `${Math.round(rating) / MAX_RATING * 100}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

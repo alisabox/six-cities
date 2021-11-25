@@ -5,7 +5,7 @@ import { clearPostReviewStatus, getReviewsAction, postReviewAction } from '../..
 
 export const initialState: ReviewsState = {
   reviews: undefined,
-  isPostSuccessfull: false,
+  postSuccess: false,
 };
 
 export const reviewsData = createReducer(initialState, (builder) => {
@@ -15,9 +15,9 @@ export const reviewsData = createReducer(initialState, (builder) => {
     })
     .addCase(postReviewAction, (state, action) => {
       state.reviews = action.payload.reviews?.map((item)  => adaptReviewsToClient(item));
-      state.isPostSuccessfull = true;
+      state.postSuccess = true;
     })
     .addCase(clearPostReviewStatus, (state) => {
-      state.isPostSuccessfull = initialState.isPostSuccessfull;
+      state.postSuccess = initialState.postSuccess;
     });
 });

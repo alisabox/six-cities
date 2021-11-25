@@ -4,7 +4,7 @@ export const AppRoute = {
   ROOT: '/',
   LOGIN: '/login',
   OFFER: '/offer',
-  FAVORITE: '/favorite',
+  FAVORITE: '/favorites',
   NOT_FOUND: '/not-found',
 } as const;
 
@@ -49,10 +49,10 @@ export const getRandomRoomType = (): string => {
   return keys[index];
 };
 
-export const URL_MARKER_DEFAULT = './img/pin.svg';
-
-export const URL_MARKER_CURRENT = './img/pin-active.svg';
-
+export const Markers = {
+  DEFAULT: './img/pin.svg',
+  CURRENT: './img/pin-active.svg',
+};
 
 export const Screen = {
   MAIN: 'cities',
@@ -147,8 +147,8 @@ export const adaptReviewsToClient = (data: ReviewsType): ReviewsType => {
 };
 
 export enum ActionType {
-  GetCityAction = 'MAIN_GET_CITY',
-  GetOffersAction = 'MAIN_GET_OFFERS',
+  GetCityAction = 'MAIN/GET_CITY',
+  GetOffersAction = 'MAIN/GET_OFFERS',
   GetOfferByIDAction = 'OFFERS/GET_OFFER',
   ClearOfferByIDAction = 'OFFERS/CLEAR_OFFER',
   GetNearByOffers = 'OFFERS/GET_NEARBY',
@@ -165,6 +165,26 @@ export enum ActionType {
 }
 
 export const TypeOfFavoriteAction = {
-  ADD_TO_FAVOTITE: 1,
-  REMOVE_FROM_FAVOTITE:  0,
+  ADDITION_TO_FAVOTITE: 1,
+  REMOVAL_FROM_FAVOTITE:  0,
+};
+
+const LoginRegexp = {
+  EMAIL: /[^@\s]+@[^@\s]+\.[^@\s]+$/,
+  PASSWORD: /^(?=.*\d)(?=.*[a-zA-Z])/,
+};
+
+export const validate = (login?: string, password?: string): boolean => {
+  const validLoogin = login && LoginRegexp.EMAIL.test(login);
+  const validPassword = password && LoginRegexp.PASSWORD.test(password);
+  if (validLoogin && validPassword) {
+    return true;
+  }
+  return false;
+};
+
+export const FailMessages = {
+  POST: 'Unable to send the message. Check your internet connection',
+  ADD_TO_FAVORITES: 'Unable to add to favorites. Check your internet connection',
+  REMOVE_FROM_FAVORITES: 'Unable to remove from favorites. Check your internet connection',
 };

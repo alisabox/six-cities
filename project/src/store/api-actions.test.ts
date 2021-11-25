@@ -171,7 +171,7 @@ describe('Async actions', () => {
   it('should dispatch addToFavoriteOffers when POST /favorite/add', async () => {
     const mockOffer = makeFakeOffers();
     mockAPI
-      .onPost(`${APIRoute.FAVORITE}/${mockOffer.id}/${TypeOfFavoriteAction.ADD_TO_FAVOTITE}`)
+      .onPost(`${APIRoute.FAVORITE}/${mockOffer.id}/${TypeOfFavoriteAction.ADDITION_TO_FAVOTITE}`)
       .reply(200, mockOffer);
 
     const store = mockStore();
@@ -185,7 +185,7 @@ describe('Async actions', () => {
   it('should dispatch removeFromFavoriteOffers when POST /favorite/remove', async () => {
     const mockOffer = makeFakeOffers();
     mockAPI
-      .onPost(`${APIRoute.FAVORITE}/${mockOffer.id}/${TypeOfFavoriteAction.REMOVE_FROM_FAVOTITE}`)
+      .onPost(`${APIRoute.FAVORITE}/${mockOffer.id}/${TypeOfFavoriteAction.REMOVAL_FROM_FAVOTITE}`)
       .reply(200, mockOffer);
 
     const store = mockStore();

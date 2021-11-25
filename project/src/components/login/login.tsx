@@ -1,14 +1,16 @@
 import { useRef, FormEvent, MouseEvent } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus, getRandomCity } from '../../const/const';
+import { toast } from 'react-toastify';
+import { AppRoute, AuthorizationStatus, getRandomCity, validate } from '../../const/const';
 import { getCity, redirectToRoute } from '../../store/action';
 import { loginAction } from '../../store/api-actions';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
 import Header from '../header/header';
 
+export const INVALID_LOGIN_MESSAGE = 'Invalid email or password';
 
-const randomCity = getRandomCity();
+export const randomCity = getRandomCity();
 
 function LoginScreen():JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
@@ -19,7 +21,11 @@ function LoginScreen():JSX.Element {
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-
+    const isValidLogin = validate(loginRef.current?.value, passwordRef.current?.value);
+    if (!isValidLogin) {
+      toast.info(INVALID_LOGIN_MESSAGE);
+      return;
+    }
     if (loginRef.current !== null && passwordRef.current !== null) {
       dispatch(loginAction({
         login: loginRef.current.value,
@@ -74,6 +80,7 @@ function LoginScreen():JSX.Element {
               <button
                 className="login__submit form__submit button"
                 type="submit"
+                data-testid="submit"
               >
                 Sign in
               </button>

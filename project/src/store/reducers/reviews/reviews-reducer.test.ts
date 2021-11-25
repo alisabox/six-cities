@@ -15,36 +15,36 @@ describe('Function: offersData', () => {
   it('should update reviews on data load', () => {
     const state = {
       reviews: undefined,
-      isPostSuccessfull: false,
+      postSuccess: false,
     };
     expect(reviewsData(state, getReviewsAction(reviews)))
       .toEqual({
         reviews: adaptedReviews,
-        isPostSuccessfull: false,
+        postSuccess: false,
       });
   });
 
   it('should update reviews and post status', () => {
     const state = {
       reviews: adaptedReviews,
-      isPostSuccessfull: false,
+      postSuccess: false,
     };
     expect(reviewsData(state, postReviewAction(reviews)))
       .toEqual({
         reviews: adaptedReviews,
-        isPostSuccessfull: true,
+        postSuccess: true,
       });
   });
 
   it('should clear post status', () => {
     const state = {
       reviews: adaptedReviews,
-      isPostSuccessfull: true,
+      postSuccess: true,
     };
     expect(reviewsData(state, clearPostReviewStatus()))
       .toEqual({
         reviews: adaptedReviews,
-        isPostSuccessfull: false,
+        postSuccess: false,
       });
   });
 });
