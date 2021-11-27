@@ -1,5 +1,5 @@
 import { OffersType, ThunkActionResult, AuthData, ReviewsType, PostReviewType } from '../types/types';
-import { getFavoriteOffers, getNearByOffers, getOfferByID, getOffers, getReviewsAction, postReviewAction, redirectToRoute, removeFromFavoriteOffers, requireAuthorization, requireLogout, clearFavoriteOffers, addToFavoriteOffers } from './action';
+import { getFavoriteOffers, getNearByOffers, getOfferByID, getOffers, getReviewsAction, postReviewAction, redirectToRoute, removeFromFavoriteOffers, requireAuthorization, requireLogout, clearFavoriteOffers, addToFavoriteOffers, postReviewError } from './action';
 import { saveToken, dropToken, Token } from '../services/token';
 import { APIRoute, AuthorizationStatus, AppRoute, TypeOfFavoriteAction, FailMessages } from '../const/const';
 import { toast } from 'react-toastify';
@@ -39,6 +39,7 @@ export const postReview = (id: number, review: PostReviewType): ThunkActionResul
       dispatch(postReviewAction(data));
     } catch {
       toast.info(FailMessages.POST);
+      dispatch(postReviewError());
     }
   };
 

@@ -12,14 +12,12 @@ import Header from '../header/header';
 import { getFavoriteOffersMemo, getNearbyOffers, getOfferByID } from '../../store/reducers/offers/offers-selectors';
 import { getReviews } from '../../store/reducers/reviews/reviews-selectors';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
-import { ReviewsType } from '../../types/types';
 import { handleFavoriteClickAction } from '../../utils/utils';
 
 type OfferParams = {
   id: string;
 };
 
-const MAX_NUMBER_OF_REVIEWS = 10;
 const MAX_NUMBER_OF_IMAGES = 6;
 
 function PropertyScreen():JSX.Element {
@@ -28,16 +26,9 @@ function PropertyScreen():JSX.Element {
 
   const offer = useSelector(getOfferByID);
   const nearbyOffers = useSelector(getNearbyOffers);
-  const allReviews = useSelector(getReviews);
+  const reviews = useSelector(getReviews);
   const isFavorite = useSelector(getFavoriteOffersMemo(id));
   const authorizationStatus = useSelector(getAuthorizationStatus);
-
-  let reviews: ReviewsType[] = [];
-  if (allReviews && allReviews.length < MAX_NUMBER_OF_REVIEWS) {
-    reviews = allReviews;
-  } else if (allReviews && allReviews.length > MAX_NUMBER_OF_REVIEWS) {
-    reviews = allReviews.slice(allReviews.length-MAX_NUMBER_OF_REVIEWS, allReviews.length);
-  }
 
   const dispatch = useDispatch();
 
@@ -69,7 +60,7 @@ function PropertyScreen():JSX.Element {
           <div className="property__gallery-container container">
             <div className="property__gallery">
               {
-                images.slice(0, MAX_NUMBER_OF_IMAGES).map((image, index) =>  (
+                images.slice(0, MAX_NUMBER_OF_IMAGES).map((image) =>  (
                   <div key={image} className="property__image-wrapper">
                     <img className="property__image" src={image} alt="Property" />
                   </div>
@@ -166,7 +157,7 @@ function PropertyScreen():JSX.Element {
           <section className="property__map map">
             {
               nearbyOffers
-                ? <Map offers={[offer, ...nearbyOffers]}/>
+                ? <Map offers={[offer, ...nearbyOffers]} selectedPoint={id}/>
                 :  ''
             }
           </section>

@@ -1,6 +1,6 @@
 import { reviewsData, initialState } from './reviews-reducer';
 import { makeFakeReviews } from '../../../utils/mocks';
-import { clearPostReviewStatus, getReviewsAction, postReviewAction } from '../../action';
+import { clearPostReviewStatus, getReviewsAction, postReviewAction, postReviewError, clearPostReviewError } from '../../action';
 import { adaptReviewsToClient } from '../../../const/const';
 
 const reviews = [makeFakeReviews()];
@@ -16,11 +16,13 @@ describe('Function: offersData', () => {
     const state = {
       reviews: undefined,
       postSuccess: false,
+      postError: false,
     };
     expect(reviewsData(state, getReviewsAction(reviews)))
       .toEqual({
         reviews: adaptedReviews,
         postSuccess: false,
+        postError: false,
       });
   });
 
@@ -28,11 +30,27 @@ describe('Function: offersData', () => {
     const state = {
       reviews: adaptedReviews,
       postSuccess: false,
+      postError: false,
     };
     expect(reviewsData(state, postReviewAction(reviews)))
       .toEqual({
         reviews: adaptedReviews,
         postSuccess: true,
+        postError: false,
+      });
+  });
+
+  it('should update error status', () => {
+    const state = {
+      reviews: adaptedReviews,
+      postSuccess: false,
+      postError: false,
+    };
+    expect(reviewsData(state, postReviewError()))
+      .toEqual({
+        reviews: adaptedReviews,
+        postSuccess: false,
+        postError: true,
       });
   });
 
@@ -40,11 +58,27 @@ describe('Function: offersData', () => {
     const state = {
       reviews: adaptedReviews,
       postSuccess: true,
+      postError: false,
     };
     expect(reviewsData(state, clearPostReviewStatus()))
       .toEqual({
         reviews: adaptedReviews,
         postSuccess: false,
+        postError: false,
+      });
+  });
+
+  it('should clear post error status', () => {
+    const state = {
+      reviews: adaptedReviews,
+      postSuccess: false,
+      postError: true,
+    };
+    expect(reviewsData(state, clearPostReviewError()))
+      .toEqual({
+        reviews: adaptedReviews,
+        postSuccess: false,
+        postError: false,
       });
   });
 });

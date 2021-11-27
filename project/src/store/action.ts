@@ -58,7 +58,11 @@ export const postReviewAction = createAction(
   }),
 );
 
+export const postReviewError = createAction(ActionType.PostError);
+
 export const clearPostReviewStatus = createAction(ActionType.ClearPostReviewStatus);
+
+export const clearPostReviewError = createAction(ActionType.ClearPostReviewError);
 
 export const getFavoriteOffers = createAction(
   ActionType.GetFavoriteOffers,

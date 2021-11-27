@@ -83,6 +83,7 @@ export type OffersState = {
 export type ReviewsState = {
   reviews?: ReviewsType[];
   postSuccess: boolean;
+  postError: boolean;
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;

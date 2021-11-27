@@ -8,14 +8,17 @@ type ReviewsListProps = {
   reviews: ReviewsType[];
 }
 
+const MAX_NUMBER_OF_REVIEWS = 10;
+
 function ReviewsList({reviews}: ReviewsListProps):JSX.Element {
 
   const authorizationStatus = useSelector(getAuthorizationStatus);
-  const sortedReviews = reviews.slice().sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-
+  const sortedReviews = reviews.length >= 10
+    ? reviews.slice(reviews.length - MAX_NUMBER_OF_REVIEWS, reviews.length).reverse()
+    : reviews.slice().reverse();
   return (
     <section className="property__reviews reviews">
-      <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews?.length}</span></h2>
+      <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{sortedReviews?.length}</span></h2>
       <ul className="reviews__list">
         {
           sortedReviews.map((review) => {
