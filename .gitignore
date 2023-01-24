@@ -1,12 +1,24 @@
-# Файлы и папки операционной системы
-.DS_Store
-Thumbs.db
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Файлы редактора
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# misc
+Thumbs.db
+.DS_Store
+.env
+*.log*
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editors
 .idea
 *.sublime*
 .vscode
-
-# Вспомогательные файлы
-*.log*
-node_modules/
