@@ -1,11 +1,12 @@
 import { memo, MouseEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AppRoute, RoomTypes, MAX_RATING, Screen, BasicCardImageSize, FavoriteCardImageSize } from '../../const/const';
 import { getFavoriteOffersMemo } from '../../store/reducers/offers/offers-selectors';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
 import { handleFavoriteClickAction } from '../../utils/utils';
 import { OffersType } from '../../types/types';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '../../hooks/useAppSelector';
 
 type CardProps = {
   offer: OffersType;
@@ -15,10 +16,10 @@ type CardProps = {
   isPropertyScreen?: boolean;
 }
 
-function Card({offer, listItemHoverHandler, isMainScreen, isFavoriteScreen, isPropertyScreen}:CardProps):JSX.Element {
-  const {isPremium, previewImage, title, price, rating, type, id} = offer;
-  const isFavorite = useSelector(getFavoriteOffersMemo(id));
-  const authorizationStatus = useSelector(getAuthorizationStatus);
+function Card({ offer, listItemHoverHandler, isMainScreen, isFavoriteScreen, isPropertyScreen }: CardProps): JSX.Element {
+  const { isPremium, previewImage, title, price, rating, type, id } = offer;
+  const isFavorite = useAppSelector(getFavoriteOffersMemo(id));
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   const handleHover = (evt: MouseEvent<HTMLElement>) => {
     if (!isMainScreen) {
@@ -36,13 +37,13 @@ function Card({offer, listItemHoverHandler, isMainScreen, isFavoriteScreen, isPr
     }
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleFavoriteClick = () => dispatch(handleFavoriteClickAction(authorizationStatus, isFavorite, id));
 
 
   const getScreenClass = () => {
-    switch(true) {
+    switch (true) {
       case isMainScreen:
         return Screen.MAIN;
       case isFavoriteScreen:
@@ -67,7 +68,7 @@ function Card({offer, listItemHoverHandler, isMainScreen, isFavoriteScreen, isPr
           : ''
       }
       <div className={`${getScreenClass()}__image-wrapper place-card__image-wrapper`}>
-        <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer.id}}>
+        <Link to={`${AppRoute.OFFER}/${id}`} state={offer.id}>
           <img className="place-card__image" src={previewImage}
             width={isFavoriteScreen ? FavoriteCardImageSize.WIDTH : BasicCardImageSize.WIDTH}
             height={isFavoriteScreen ? FavoriteCardImageSize.HEIGHT : BasicCardImageSize.HEIGHT}
@@ -94,12 +95,12 @@ function Card({offer, listItemHoverHandler, isMainScreen, isFavoriteScreen, isPr
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${Math.round(rating) / MAX_RATING * 100}%`}}></span>
+            <span style={{ width: `${Math.round(rating) / MAX_RATING * 100}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer.id}}>{title}</Link>
+          <Link to={`${AppRoute.OFFER}/${id}`} state={offer.id}>{title}</Link>
         </h2>
         <p className="place-card__type">{RoomTypes[type.toUpperCase()]}</p>
       </div>

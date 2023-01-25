@@ -1,19 +1,19 @@
-import { render } from '@testing-library/react';
-import { Router } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import LoadingScreen from './loading-screen';
+import { CustomRouter } from '../..';
 
 describe('Component: LoadingScreen', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
-    const {queryByText} = render(
-      <Router history={history}>
+    render(
+      <CustomRouter history={history}>
         <LoadingScreen />
-      </Router>,
+      </CustomRouter>,
     );
 
-    expect(queryByText(/The page is loading/i)).toBeInTheDocument();
-    expect(queryByText(/Sign in/i)).toBeNull();
-    expect(queryByText(/Sign out/i)).toBeNull();
+    expect(screen.getByText(/The page is loading/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Sign in/i)).toBeNull();
+    expect(screen.queryByText(/Sign out/i)).toBeNull();
   });
 });

@@ -1,5 +1,4 @@
-import { Route, Switch } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
 import MainScreen from '../main/main';
 import LoginScreen from '../login/login';
 import FavoritesScreen from '../favorites/favorites';
@@ -11,11 +10,12 @@ import LoadingScreen from '../loading-screen/loading-screen';
 import { isCheckedAuth } from '../../const/const';
 import { getLoadedDataStatus } from '../../store/reducers/offers/offers-selectors';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
+import { useAppSelector } from '../../hooks/useAppSelector';
 
 
 function App(): JSX.Element {
-  const authorizationStatus = useSelector(getAuthorizationStatus);
-  const isDataLoaded = useSelector(getLoadedDataStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isDataLoaded = useAppSelector(getLoadedDataStatus);
 
   if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return (
@@ -24,29 +24,18 @@ function App(): JSX.Element {
   }
 
   return (
-    <Switch>
-      <Route path={AppRoute.ROOT} exact>
-        <MainScreen />
-      </Route>
-      <Route path={AppRoute.LOGIN} exact>
-        <LoginScreen />
-      </Route>
-      <PrivateRoute
-        exact
-        path={AppRoute.FAVORITE}
-        render={()=> <FavoritesScreen/>}
-      >
-      </PrivateRoute>
-      <Route path={`${AppRoute.OFFER}/:id`}>
-        <PropertyScreen />
-      </Route>
-      <Route path={AppRoute.NOT_FOUND}>
-        <Screen404 />
-      </Route>
-      <Route>
-        <Screen404 />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={AppRoute.ROOT} element={<MainScreen />} />
+      <Route path={AppRoute.LOGIN} element={<LoginScreen />} />
+      <Route path={AppRoute.FAVORITE} element={
+        <PrivateRoute>
+          <FavoritesScreen />
+        </PrivateRoute>
+      } />
+      <Route path={`${AppRoute.OFFER}/:id`} element={<PropertyScreen />} />
+      <Route path={AppRoute.NOT_FOUND} element={<Screen404 />} />
+      <Route path={'/*'} element={<Screen404 />} />
+    </Routes>
   );
 }
 

@@ -1,19 +1,20 @@
 import { MouseEvent } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { getCity } from '../../store/action';
 import { cities } from '../../const/const';
 import OffersList from '../offers-list/offers-list';
 import MainScreenEmpty from '../main-empty/main-empty';
 import Header from '../header/header';
 import { getOffersInSelectedCity, getSelectedCity } from '../../store/reducers/offers/offers-selectors';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
 
 
-function MainScreen():JSX.Element {
-  const selectedCity = useSelector(getSelectedCity);
+function MainScreen(): JSX.Element {
+  const selectedCity = useAppSelector(getSelectedCity);
 
-  const offersInSelectedCity = useSelector(getOffersInSelectedCity(selectedCity));
+  const offersInSelectedCity = useAppSelector(getOffersInSelectedCity(selectedCity));
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleCityClick = (evt: MouseEvent<HTMLElement>) => {
     evt.preventDefault();
@@ -50,7 +51,7 @@ function MainScreen():JSX.Element {
         </div>
         {
           offersInSelectedCity.length === 0
-            ? <MainScreenEmpty selectedCity={selectedCity}/>
+            ? <MainScreenEmpty selectedCity={selectedCity} />
             : <OffersList selectedCity={selectedCity} offers={offersInSelectedCity} />
         }
       </main>

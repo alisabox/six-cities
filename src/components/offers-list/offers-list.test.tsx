@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
-import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import OffersList from './offers-list';
 import { AppRoute, AuthorizationStatus } from '../../const/const';
 import { makeFakeOffers } from '../../utils/mocks';
+import { CustomRouter } from '../..';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -15,8 +15,8 @@ const mockOffers = [makeFakeOffers()];
 const mockSelectedCity = mockOffers[0].city.name;
 
 const store = mockStore({
-  OFFERS: {favoriteOffers: mockOffers},
-  USER: {authorizationStatus: AuthorizationStatus.Auth},
+  OFFERS: { favoriteOffers: mockOffers },
+  USER: { authorizationStatus: AuthorizationStatus.Auth },
 });
 
 describe('Component: OffersList', () => {
@@ -27,12 +27,12 @@ describe('Component: OffersList', () => {
   it('should render correctly', () => {
     render(
       <Provider store={store}>
-        <Router history={history}>
+        <CustomRouter history={history}>
           <OffersList
             offers={mockOffers}
             selectedCity={mockSelectedCity}
           />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 

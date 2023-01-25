@@ -1,6 +1,8 @@
-import { address, name, datatype, lorem, image, date, internet } from 'faker';
+import { faker } from '@faker-js/faker';
 import { OffersType, ReviewsType } from '../types/types';
 import { getRandomCity, getRandomRoomType } from '../const/const';
+
+const { address, name, datatype, lorem, image, date, internet } = faker;
 
 const { number } = datatype;
 const { paragraph, word } = lorem;
@@ -11,26 +13,26 @@ export const makeFakeOffers = (): OffersType => ({
   city: {
     location: {
       latitude: parseFloat(address.latitude()),
-      longitude:  parseFloat(address.longitude()),
+      longitude: parseFloat(address.longitude()),
       zoom: number(),
     },
     name: getRandomCity(),
   },
   description: paragraph(),
-  goods: new Array(number({'min': 1, 'max': 5})).fill(null).map(() => word()),
+  goods: new Array(number({ 'min': 1, 'max': 5 })).fill(null).map(() => word()),
   host: {
     'avatar_url': imageUrl(),
     id: number(),
     'is_pro': datatype.boolean(),
-    name: name.findName(),
+    name: name.fullName(),
   },
   id: number(),
-  images: new Array(number({'min': 1, 'max': 5})).fill(null).map(() => `${imageUrl()}/${number()}`),
+  images: new Array(number({ 'min': 1, 'max': 5 })).fill(null).map(() => `${imageUrl()}/${number()}`),
   'is_favorite': datatype.boolean(),
   'is_premium': datatype.boolean(),
   location: {
     latitude: parseFloat(address.latitude()),
-    longitude:  parseFloat(address.longitude()),
+    longitude: parseFloat(address.longitude()),
     zoom: number(),
   },
   'max_adults': number(),
@@ -50,7 +52,7 @@ export const makeFakeReviews = (): ReviewsType => ({
     'avatar_url': imageUrl(),
     id: number(),
     'is_pro': datatype.boolean(),
-    name: name.findName(),
+    name: name.fullName(),
   },
 });
 

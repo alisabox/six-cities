@@ -1,16 +1,17 @@
 import { MouseEvent } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { AppRoute, AuthorizationStatus } from '../../const/const';
 import { logoutAction } from '../../store/api-actions';
 import { Link } from 'react-router-dom';
 import { getAuthorizationStatus, getUserEmail } from '../../store/reducers/user/user-selectors';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
 
 function UserNavigation(): JSX.Element {
 
-  const authorizationStatus = useSelector(getAuthorizationStatus);
-  const userEmail = useSelector(getUserEmail);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const userEmail = useAppSelector(getUserEmail);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleLogoutClick = (evt: MouseEvent<HTMLElement>) => {
     evt.preventDefault();

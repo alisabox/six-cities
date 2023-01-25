@@ -1,1 +1,1 @@
-Six sities project
+# Six Sities - Online booking SPA

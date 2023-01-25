@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
@@ -12,6 +11,7 @@ import { AppRoute } from '../../const/const';
 import { ToastContainer, toast } from 'react-toastify';
 import * as ApiActions from '../../store/api-actions';
 import * as Action from '../../store/action';
+import { CustomRouter } from '../..';
 
 const mockStore = configureMockStore();
 
@@ -21,10 +21,10 @@ describe('Component: LoginScreen', () => {
     history.push('/login');
 
     render(
-      <Provider store={mockStore({USER: {authorizationStatus: AuthorizationStatus.NoAuth}})}>
-        <Router history={history}>
+      <Provider store={mockStore({ USER: { authorizationStatus: AuthorizationStatus.NoAuth } })}>
+        <CustomRouter history={history}>
           <LoginScreen />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 
@@ -57,10 +57,10 @@ describe('Component: LoginScreen', () => {
     const loginAction = jest.spyOn(ApiActions, 'loginAction');
 
     render(
-      <Provider store={mockStore({USER: {authorizationStatus: AuthorizationStatus.NoAuth}})}>
-        <Router history={history}>
+      <Provider store={mockStore({ USER: { authorizationStatus: AuthorizationStatus.NoAuth } })}>
+        <CustomRouter history={history}>
           <LoginScreen />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 
@@ -90,11 +90,11 @@ describe('Component: LoginScreen', () => {
     const useDispatch = jest.spyOn(Redux, 'useDispatch');
     useDispatch.mockReturnValue(dispatch);
     render(
-      <Provider store={mockStore({USER: {authorizationStatus: AuthorizationStatus.NoAuth}})}>
-        <Router history={history}>
+      <Provider store={mockStore({ USER: { authorizationStatus: AuthorizationStatus.NoAuth } })}>
+        <CustomRouter history={history}>
           <ToastContainer />
           <LoginScreen />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 
@@ -118,10 +118,10 @@ describe('Component: LoginScreen', () => {
     const redirectToRoute = jest.spyOn(Action, 'redirectToRoute');
 
     render(
-      <Provider store={mockStore({USER: {authorizationStatus: AuthorizationStatus.NoAuth}})}>
-        <Router history={history}>
+      <Provider store={mockStore({ USER: { authorizationStatus: AuthorizationStatus.NoAuth } })}>
+        <CustomRouter history={history}>
           <LoginScreen />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 
@@ -138,10 +138,10 @@ describe('Component: LoginScreen', () => {
     history.push('/login');
 
     render(
-      <Provider store={mockStore({USER: {authorizationStatus: AuthorizationStatus.Auth}})}>
-        <Router history={history}>
+      <Provider store={mockStore({ USER: { authorizationStatus: AuthorizationStatus.Auth } })}>
+        <CustomRouter history={history}>
           <LoginScreen />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 

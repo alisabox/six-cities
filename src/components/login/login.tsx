@@ -1,8 +1,9 @@
-import { useRef, FormEvent, MouseEvent } from 'react';
-import { useDispatch, useSelector} from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { FormEvent, ChangeEvent, MouseEvent, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AppRoute, AuthorizationStatus, getRandomCity, validate } from '../../const/const';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '../../hooks/useAppSelector';
 import { getCity, redirectToRoute } from '../../store/action';
 import { loginAction } from '../../store/api-actions';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
@@ -12,24 +13,34 @@ export const INVALID_LOGIN_MESSAGE = 'Invalid email or password';
 
 export const randomCity = getRandomCity();
 
-function LoginScreen():JSX.Element {
-  const authorizationStatus = useSelector(getAuthorizationStatus);
-  const dispatch = useDispatch();
+function LoginScreen(): JSX.Element {
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const dispatch = useAppDispatch();
 
-  const loginRef = useRef<HTMLInputElement | null>(null);
-  const passwordRef = useRef<HTMLInputElement | null>(null);
+  const [form, setForm] = useState({
+    email: 'user@mail.com',
+    password: '1!Qwerty'
+  })
+
+  const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = evt.target;
+    setForm((state) => ({
+      ...state,
+      [name]: value,
+    }))
+  }
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const isValidLogin = validate(loginRef.current?.value, passwordRef.current?.value);
+    const isValidLogin = validate(form.email, form.password);
     if (!isValidLogin) {
       toast.info(INVALID_LOGIN_MESSAGE);
       return;
     }
-    if (loginRef.current !== null && passwordRef.current !== null) {
+    if (form.email && form.password) {
       dispatch(loginAction({
-        login: loginRef.current.value,
-        password: passwordRef.current.value,
+        login: form.email,
+        password: form.password,
       }));
     }
   };
@@ -41,7 +52,7 @@ function LoginScreen():JSX.Element {
   };
 
   if (authorizationStatus === AuthorizationStatus.Auth) {
-    return <Redirect to={AppRoute.ROOT} />;
+    return <Navigate to={AppRoute.ROOT} />;
   }
 
   return (
@@ -56,25 +67,27 @@ function LoginScreen():JSX.Element {
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input
-                  ref={loginRef}
+                  value={form.email}
                   className="login__input form__input"
                   type="email"
                   name="email"
                   data-testid="email"
                   placeholder="Email"
                   required
+                  onChange={handleChange}
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
                 <input
-                  ref={passwordRef}
+                  value={form.password}
                   className="login__input form__input"
                   type="password"
                   name="password"
                   data-testid="password"
                   placeholder="Password"
                   required
+                  onChange={handleChange}
                 />
               </div>
               <button

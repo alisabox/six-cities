@@ -1,18 +1,18 @@
-import { render } from '@testing-library/react';
-import { Router } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import Header from './header';
+import { CustomRouter } from '../..';
 
 describe('Component: Header', () => {
   it('should render correctly on page without user navigation', () => {
     const history = createMemoryHistory();
-    const {queryByText} = render(
-      <Router history={history}>
+    render(
+      <CustomRouter history={history}>
         <Header />
-      </Router>,
+      </CustomRouter>,
     );
 
-    expect(queryByText('Sign in')).toBeNull();
-    expect(queryByText('Sign out')).toBeNull();
+    expect(screen.queryByText('Sign in')).toBeNull();
+    expect(screen.queryByText('Sign out')).toBeNull();
   });
 });

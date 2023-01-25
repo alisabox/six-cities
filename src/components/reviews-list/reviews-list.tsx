@@ -1,8 +1,8 @@
-import { useSelector } from 'react-redux';
 import ReviewForm from '../review-form/review-form';
 import { ReviewsType } from '../../types/types';
 import { AuthorizationStatus, MAX_RATING } from '../../const/const';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
+import { useAppSelector } from '../../hooks/useAppSelector';
 
 type ReviewsListProps = {
   reviews: ReviewsType[];
@@ -10,9 +10,9 @@ type ReviewsListProps = {
 
 const MAX_NUMBER_OF_REVIEWS = 10;
 
-function ReviewsList({reviews}: ReviewsListProps):JSX.Element {
+function ReviewsList({ reviews }: ReviewsListProps): JSX.Element {
 
-  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const sortedReviews = reviews.length >= 10
     ? reviews.slice(reviews.length - MAX_NUMBER_OF_REVIEWS, reviews.length).reverse()
     : reviews.slice().reverse();
@@ -23,8 +23,8 @@ function ReviewsList({reviews}: ReviewsListProps):JSX.Element {
         {
           sortedReviews.map((review) => {
             const date = new Date(review.date);
-            const dateTime = date.toISOString().substring(0,10);
-            const monthYear = date.toLocaleString('default', { month: 'long' , year: 'numeric'});
+            const dateTime = date.toISOString().substring(0, 10);
+            const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
 
             return (
               <li key={review.id} className="reviews__item">
@@ -39,7 +39,7 @@ function ReviewsList({reviews}: ReviewsListProps):JSX.Element {
                 <div className="reviews__info">
                   <div className="reviews__rating rating">
                     <div className="reviews__stars rating__stars">
-                      <span style={{width: `${review.rating / MAX_RATING * 100}%`}}></span>
+                      <span style={{ width: `${review.rating / MAX_RATING * 100}%` }}></span>
                       <span className="visually-hidden">Rating</span>
                     </div>
                   </div>

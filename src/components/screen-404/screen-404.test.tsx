@@ -1,17 +1,17 @@
-import { render } from '@testing-library/react';
-import { Router } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import Screen404 from './screen-404';
+import { CustomRouter } from '../..';
 
 describe('Component: Screen404', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
-    const {getByText} = render(
-      <Router history={history}>
+    render(
+      <CustomRouter history={history}>
         <Screen404 />
-      </Router>,
+      </CustomRouter>,
     );
 
-    expect(getByText('404 Page Not Found')).toBeInTheDocument();
+    expect(screen.getByText('404 Page Not Found')).toBeInTheDocument();
   });
 });

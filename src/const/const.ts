@@ -18,7 +18,7 @@ type RoomTypesType = {
   [key: string]: string;
 }
 
-export const RoomTypes:RoomTypesType = {
+export const RoomTypes: RoomTypesType = {
   APARTMENT: 'Apartment',
   ROOM: 'Private room',
   HOUSE: 'House',
@@ -50,14 +50,14 @@ export const getRandomRoomType = (): string => {
 };
 
 export const Markers = {
-  DEFAULT: './img/pin.svg',
-  CURRENT: './img/pin-active.svg',
+  DEFAULT: '../img/pin.svg',
+  CURRENT: '../img/pin-active.svg',
 };
 
 export const Screen = {
   MAIN: 'cities',
   FAVORITE: 'favorites',
-  PROPERTY:'near-places',
+  PROPERTY: 'near-places',
 };
 
 export const BasicCardImageSize = {
@@ -95,7 +95,7 @@ export const APIRoute = {
   LOGIN: '/login',
   LOGOUT: '/logout',
   REVIEWS: '/comments',
-  FAVORITE:  '/favorite',
+  FAVORITE: '/favorite',
 };
 
 export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean =>
@@ -168,7 +168,7 @@ export enum ActionType {
 
 export const TypeOfFavoriteAction = {
   ADDITION_TO_FAVOTITE: 1,
-  REMOVAL_FROM_FAVOTITE:  0,
+  REMOVAL_FROM_FAVOTITE: 0,
 };
 
 const LoginRegexp = {

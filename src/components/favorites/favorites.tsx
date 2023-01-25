@@ -1,5 +1,4 @@
 import { MouseEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { cities, AppRoute } from '../../const/const';
 import { getFavoriteOffers } from '../../store/reducers/offers/offers-selectors';
 import { getCity, redirectToRoute } from '../../store/action';
@@ -8,9 +7,11 @@ import Card from '../card/card';
 import FavoritesScreenEmpty from '../favorites-empty/favorites-empty';
 import Header from '../header/header';
 import Footer from '../footer/footer';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '../../hooks/useAppSelector';
 
-function FavoritesScreen():JSX.Element {
-  const favoriteOffers = useSelector(getFavoriteOffers);
+function FavoritesScreen(): JSX.Element {
+  const favoriteOffers = useAppSelector(getFavoriteOffers);
   const favoriteCities: FavoriteCitiesType = {};
   cities.map((city) => {
     const cityFavoriteOffers = favoriteOffers.filter((offer) => offer.city.name === city);
@@ -20,7 +21,7 @@ function FavoritesScreen():JSX.Element {
     return null;
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleCityRedirect = (evt: MouseEvent<HTMLElement>) => {
     evt.preventDefault();
@@ -55,7 +56,7 @@ function FavoritesScreen():JSX.Element {
                     </div>
                     <div className="favorites__places">
                       {
-                        entry[1].map((favoriteOffer) => <Card key={favoriteOffer.id} offer={favoriteOffer} isFavoriteScreen/>)
+                        entry[1].map((favoriteOffer) => <Card key={favoriteOffer.id} offer={favoriteOffer} isFavoriteScreen />)
                       }
                     </div>
                   </li>

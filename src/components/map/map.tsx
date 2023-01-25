@@ -22,10 +22,10 @@ const currentCustomIcon = new Icon({
   iconAnchor: [14, 40],
 });
 
-function Map(props: MapProps):JSX.Element {
-  const {offers, selectedPoint} = props;
+function Map(props: MapProps): JSX.Element {
+  const { offers, selectedPoint } = props;
   const city = offers[0].city;
-  const points = offers.map((offer) => ({location: offer.location, id: offer.id}));
+  const points = offers.map((offer) => ({ location: offer.location, id: offer.id }));
   const mapRef = useRef(null);
 
   const map = useMap(mapRef, city);
@@ -55,7 +55,7 @@ function Map(props: MapProps):JSX.Element {
     }
   }, [map, city]);
 
-  return <div style={{height: '100%'}} ref={mapRef}></div>;
+  return <div style={{ height: '100%' }} ref={mapRef}></div>;
 }
 
 export default memo(Map);

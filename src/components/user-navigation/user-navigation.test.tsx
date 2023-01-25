@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import UserNavigation from './user-navigation';
 import { AppRoute, AuthorizationStatus } from '../../const/const';
+import { CustomRouter } from '../..';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -15,14 +15,14 @@ describe('Component: UserNavigation', () => {
   it('should render correctly when user is not logged', () => {
 
     const store = mockStore({
-      USER: {authorizationStatus: AuthorizationStatus.NoAuth},
+      USER: { authorizationStatus: AuthorizationStatus.NoAuth },
     });
 
-    render (
+    render(
       <Provider store={store}>
-        <Router history={history}>
+        <CustomRouter history={history}>
           <UserNavigation />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 
@@ -33,14 +33,14 @@ describe('Component: UserNavigation', () => {
   it('should render correctly when user is logged', () => {
 
     const store = mockStore({
-      USER: {authorizationStatus: AuthorizationStatus.Auth, userEmail: 'test@test.com'},
+      USER: { authorizationStatus: AuthorizationStatus.Auth, userEmail: 'test@test.com' },
     });
 
-    render (
+    render(
       <Provider store={store}>
-        <Router history={history}>
+        <CustomRouter history={history}>
           <UserNavigation />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 

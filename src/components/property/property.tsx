@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import { RoomTypes, MAX_RATING } from '../../const/const';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
@@ -13,6 +12,8 @@ import { getFavoriteOffersMemo, getNearbyOffers, getOfferByID } from '../../stor
 import { getReviews } from '../../store/reducers/reviews/reviews-selectors';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
 import { handleFavoriteClickAction } from '../../utils/utils';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
 
 type OfferParams = {
   id: string;
@@ -20,17 +21,17 @@ type OfferParams = {
 
 const MAX_NUMBER_OF_IMAGES = 6;
 
-function PropertyScreen():JSX.Element {
+function PropertyScreen(): JSX.Element {
   const params = useParams<OfferParams>();
-  const id = parseInt(params.id, 10);
+  const id = parseInt(params.id!, 10);
 
-  const offer = useSelector(getOfferByID);
-  const nearbyOffers = useSelector(getNearbyOffers);
-  const reviews = useSelector(getReviews);
-  const isFavorite = useSelector(getFavoriteOffersMemo(id));
-  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const offer = useAppSelector(getOfferByID);
+  const nearbyOffers = useAppSelector(getNearbyOffers);
+  const reviews = useAppSelector(getReviews);
+  const isFavorite = useAppSelector(getFavoriteOffersMemo(id));
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleFavoriteClick = () => dispatch(handleFavoriteClickAction(authorizationStatus, isFavorite, id));
 
@@ -39,7 +40,7 @@ function PropertyScreen():JSX.Element {
     dispatch(fetchNearByOffersAction(id));
     dispatch(fetchReviewsAction(id));
     window.scrollTo(0, 0);
-    return ()  => {dispatch(clearOfferByID());};
+    return () => { dispatch(clearOfferByID()); };
   }, [dispatch, id]);
 
   if (!offer) {
@@ -48,8 +49,8 @@ function PropertyScreen():JSX.Element {
     );
   }
 
-  const {images, isPremium, title, rating, type, bedrooms, maxAdults, price, goods, host, description} = offer;
-  const {avatarUrl, isPro, name} = host;
+  const { images, isPremium, title, rating, type, bedrooms, maxAdults, price, goods, host, description } = offer;
+  const { avatarUrl, isPro, name } = host;
 
   return (
     <div className="page">
@@ -60,7 +61,7 @@ function PropertyScreen():JSX.Element {
           <div className="property__gallery-container container">
             <div className="property__gallery">
               {
-                images.slice(0, MAX_NUMBER_OF_IMAGES).map((image) =>  (
+                images.slice(0, MAX_NUMBER_OF_IMAGES).map((image) => (
                   <div key={image} className="property__image-wrapper">
                     <img className="property__image" src={image} alt="Property" />
                   </div>
@@ -93,7 +94,7 @@ function PropertyScreen():JSX.Element {
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{width: `${Math.round(rating) / MAX_RATING * 100}%`}}></span>
+                  <span style={{ width: `${Math.round(rating) / MAX_RATING * 100}%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">{Math.round(rating)}</span>
@@ -127,7 +128,7 @@ function PropertyScreen():JSX.Element {
                 <h2 className="property__host-title">Meet the host</h2>
                 <div className="property__host-user user">
                   <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
-                    <img className="property__avatar user__avatar" src={avatarUrl} width="74" height="74" alt="Host avatar" />
+                    <img className="property__avatar user__avatar" src={`../${avatarUrl}`} width="74" height="74" alt="Host avatar" />
                   </div>
                   <span className="property__user-name">
                     {name}
@@ -149,7 +150,7 @@ function PropertyScreen():JSX.Element {
               </div>
               {
                 reviews
-                  ? <ReviewsList reviews={reviews}/>
+                  ? <ReviewsList reviews={reviews} />
                   : ''
               }
             </div>
@@ -157,8 +158,8 @@ function PropertyScreen():JSX.Element {
           <section className="property__map map">
             {
               nearbyOffers
-                ? <Map offers={[offer, ...nearbyOffers]} selectedPoint={id}/>
-                :  ''
+                ? <Map offers={[offer, ...nearbyOffers]} selectedPoint={id} />
+                : ''
             }
           </section>
         </section>

@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
@@ -7,6 +6,7 @@ import Card from './card';
 import { AppRoute, AuthorizationStatus, RoomTypes } from '../../const/const';
 import { makeFakeOffers } from '../../utils/mocks';
 import userEvent from '@testing-library/user-event';
+import { CustomRouter } from '../..';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -15,17 +15,17 @@ history.push(AppRoute.FAVORITE);
 const offer = makeFakeOffers();
 
 const store = mockStore({
-  OFFERS: {favoriteOffers: [offer]},
-  USER: {authorizationStatus: AuthorizationStatus.NoAuth},
+  OFFERS: { favoriteOffers: [offer] },
+  USER: { authorizationStatus: AuthorizationStatus.NoAuth },
 });
 
 describe('Component: Card', () => {
   it('should render correctly', () => {
-    render (
+    render(
       <Provider store={store}>
-        <Router history={history}>
+        <CustomRouter history={history}>
           <Card offer={offer} listItemHoverHandler={jest.fn()} isMainScreen />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 
@@ -40,11 +40,11 @@ describe('Component: Card', () => {
   it('should fire listItemHoverHandler on card hover and pass offer id', () => {
     const cardHover = jest.fn();
 
-    render (
+    render(
       <Provider store={store}>
-        <Router history={history}>
+        <CustomRouter history={history}>
           <Card offer={offer} listItemHoverHandler={cardHover} isMainScreen />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 
@@ -57,11 +57,11 @@ describe('Component: Card', () => {
   it('should fire listItemHoverHandler on card blur and pass undefined', () => {
     const cardHover = jest.fn();
 
-    render (
+    render(
       <Provider store={store}>
-        <Router history={history}>
+        <CustomRouter history={history}>
           <Card offer={offer} listItemHoverHandler={cardHover} isMainScreen />
-        </Router>
+        </CustomRouter>
       </Provider>,
     );
 
@@ -73,11 +73,11 @@ describe('Component: Card', () => {
   it('should return listItemHoverHandler with undefined on card hover if NOT isMainScreen', () => {
     const cardHover = jest.fn();
     const handleHover = jest.fn();
-    render (
+    render(
       <Provider store={store}>
-        <Router history={history}>
-          <Card offer={offer} listItemHoverHandler={cardHover}/>
-        </Router>
+        <CustomRouter history={history}>
+          <Card offer={offer} listItemHoverHandler={cardHover} />
+        </CustomRouter>
       </Provider>,
     );
 

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { Route, Router, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import * as Redux from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
@@ -7,6 +7,7 @@ import { createMemoryHistory } from 'history';
 import PropertyScreen from './property';
 import { AppRoute, AuthorizationStatus, adaptToClient } from '../../const/const';
 import { makeFakeOffers, makeFakeReviews } from '../../utils/mocks';
+import { CustomRouter } from '../..';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -18,9 +19,9 @@ const mockReviews = [makeFakeReviews()];
 
 history.push(`${AppRoute.OFFER}/${mockOffer.id}`);
 const store = mockStore({
-  OFFERS: {favoriteOffers: mockOffers, offer: mockOffer, nearbyOffers: [nearbyOffer]},
-  USER: {authorizationStatus: AuthorizationStatus.Auth},
-  REVIEWS: {reviews: mockReviews},
+  OFFERS: { favoriteOffers: mockOffers, offer: mockOffer, nearbyOffers: [nearbyOffer] },
+  USER: { authorizationStatus: AuthorizationStatus.Auth },
+  REVIEWS: { reviews: mockReviews },
 });
 
 describe('Component: PropertyScreen', () => {
@@ -35,13 +36,13 @@ describe('Component: PropertyScreen', () => {
 
     render(
       <Provider store={store}>
-        <Router history={history}>
-          <Switch>
-            <Route exact path={`${AppRoute.OFFER}/:id`}>
-              <PropertyScreen  />
+        <CustomRouter history={history}>
+          <Routes>
+            <Route path={`${AppRoute.OFFER}/:id`}>
+              <PropertyScreen />
             </Route>
-          </Switch>
-        </Router>
+          </Routes>
+        </CustomRouter>
       </Provider>,
     );
 

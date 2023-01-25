@@ -1,29 +1,17 @@
-import { Route, Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { RouteProps } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { AppRoute, AuthorizationStatus } from '../../const/const';
+import { AuthorizationStatus } from '../../const/const';
 import { getAuthorizationStatus } from '../../store/reducers/user/user-selectors';
+import { useAppSelector } from '../../hooks/useAppSelector';
 
 type PrivateRouteProps = RouteProps & {
-  render: () => JSX.Element;
+  children: JSX.Element;
 }
 
 function PrivateRoute(props: PrivateRouteProps): JSX.Element {
-  const {exact, path, render} = props;
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
-  const authorizationStatus = useSelector(getAuthorizationStatus);
-
-  return (
-    <Route
-      exact={exact}
-      path={path}
-      render={() => (
-        authorizationStatus === AuthorizationStatus.Auth
-          ? render()
-          : <Redirect to={AppRoute.LOGIN} />
-      )}
-    />
-  );
+  return authorizationStatus === AuthorizationStatus.Auth ? props.children : <Navigate to="/login" />;
 }
 
 export default PrivateRoute;

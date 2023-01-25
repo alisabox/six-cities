@@ -1,44 +1,49 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { configureStore } from '@reduxjs/toolkit';
-import { createAPI } from './services/api';
-import { Provider } from 'react-redux';
+import React, { useLayoutEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
 import App from './components/app/app';
-import { Router as BrowserRouter } from 'react-router-dom';
-import { rootReducer } from './store/reducers/root-reducer';
-import { requireAuthorization } from './store/action';
-import { fetchDataAction, checkAuthAction, fetchFavoriteOffers } from './store/api-actions';
-import { AuthorizationStatus } from './const/const';
-import { redirect } from './store/middleware/redirect';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import browserHistory from './browser-history/browser-history';
 
-const api = createAPI(
-  () => store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)),
-);
+import { fetchDataAction, checkAuthAction, fetchFavoriteOffers } from './store/api-actions';
+import { Provider } from 'react-redux';
+import { Router } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
-const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      thunk: {
-        extraArgument: api,
-      },
-    }).concat(redirect),
-});
+import 'react-toastify/dist/ReactToastify.css';
+import { store } from './store/reducers/root-reducer';
+
 
 store.dispatch(checkAuthAction());
 store.dispatch(fetchDataAction());
 store.dispatch(fetchFavoriteOffers());
 
-ReactDOM.render(
+export const CustomRouter = ({ history, ...props }: any) => {
+  const [state, setState] = useState({
+    action: history.action,
+    location: history.location
+  });
+
+  useLayoutEffect(() => history.listen(setState), [history]);
+
+  return (
+    <Router
+      {...props}
+      location={state.location}
+      navigationType={state.action}
+      navigator={history}
+    />
+  );
+};
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter history={browserHistory}>
+      <CustomRouter history={browserHistory}>
         <ToastContainer />
-        <App/>
-      </BrowserRouter>
+        <App />
+      </CustomRouter>
     </Provider>
-  </React.StrictMode>,
-  document.getElementById('root'));
+  </React.StrictMode>
+);

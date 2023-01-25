@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react';
-import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import Footer from './footer';
+import { CustomRouter } from '../..';
 
 describe('Component: Footer', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
     render(
-      <Router history={history}>
+      <CustomRouter history={history}>
         <Footer />
-      </Router>,
+      </CustomRouter>,
     );
 
     expect(screen.getByRole('link')).toBeInTheDocument();

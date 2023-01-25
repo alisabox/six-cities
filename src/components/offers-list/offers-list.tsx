@@ -6,11 +6,11 @@ import SortVariants from '../sort-variants/sort-variants';
 import { sortOffers } from '../../const/const';
 
 type OffersProps = {
-  selectedCity:  string;
+  selectedCity: string;
   offers: OffersType[];
 }
 
-function OffersList({selectedCity, offers}:OffersProps):JSX.Element {
+function OffersList({ selectedCity, offers }: OffersProps): JSX.Element {
 
   const listItemHoverHandler = useCallback((id?: number) => {
     onListItemHover(id);
@@ -29,7 +29,7 @@ function OffersList({selectedCity, offers}:OffersProps):JSX.Element {
 
   useEffect(() => {
     setSortedOffers(offers);
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }, [offers]);
 
   useEffect(() => {
@@ -42,9 +42,9 @@ function OffersList({selectedCity, offers}:OffersProps):JSX.Element {
         <section className="cities__places places">
           <h2 className="visually-hidden">Places</h2>
           <b className="places__found">{offers.length === 1 ? '1 place' : `${offers.length} places`} to stay in {selectedCity}</b>
-          <SortVariants onSortModeChange={onSortModeChange} selectedCity={selectedCity}/>
+          <SortVariants onSortModeChange={onSortModeChange} selectedCity={selectedCity} />
           <div className="cities__places-list places__list tabs__content">
-            {sortedOffers.slice().map((offer:OffersType) =>
+            {sortedOffers.slice().map((offer: OffersType) =>
               <Card key={offer.id} offer={offer} listItemHoverHandler={listItemHoverHandler} isMainScreen />,
             )}
           </div>

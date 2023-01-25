@@ -1,26 +1,26 @@
 import { render, screen } from '@testing-library/react';
-import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import MainScreenEmpty from './main-empty';
 import { AppRoute, AuthorizationStatus } from '../../const/const';
+import { CustomRouter } from '../..';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
 history.push(AppRoute.ROOT);
 
 const store = mockStore({
-  USER: {authorizationStatus: AuthorizationStatus.NoAuth},
+  USER: { authorizationStatus: AuthorizationStatus.NoAuth },
 });
 
 describe('Component: MainScreen', () => {
   it('should render correctly', () => {
-    render (
+    render(
       <Provider store={store}>
-        <Router history={history}>
-          <MainScreenEmpty  selectedCity={'Paris'}/>
-        </Router>
+        <CustomRouter history={history}>
+          <MainScreenEmpty selectedCity={'Paris'} />
+        </CustomRouter>
       </Provider>,
     );
 

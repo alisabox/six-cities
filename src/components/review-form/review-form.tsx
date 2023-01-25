@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, SyntheticEvent, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '../../hooks/useAppSelector';
 import { clearPostReviewStatus, clearPostReviewError } from '../../store/action';
 import { postReview } from '../../store/api-actions';
 import { getReviewPostStatus, getReviewPostError } from '../../store/reducers/reviews/reviews-selectors';
@@ -13,14 +14,14 @@ type OfferParams = {
 const MIN_REVIEW_LENGTH = 50;
 const MAX_REVIEW_LENGTH = 300;
 
-function ReviewForm():JSX.Element {
+function ReviewForm(): JSX.Element {
   const params = useParams<OfferParams>();
-  const id = parseInt(params.id, 10);
+  const id = parseInt(params.id!, 10);
 
-  const isPostSuccessfull = useSelector(getReviewPostStatus);
-  const isPostError = useSelector(getReviewPostError);
+  const isPostSuccessfull = useAppSelector(getReviewPostStatus);
+  const isPostError = useAppSelector(getReviewPostError);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [review, setReview] = useState<PostReviewType>({
     comment: '',
@@ -29,7 +30,7 @@ function ReviewForm():JSX.Element {
 
   const [disabledForm, setDisabledForm] = useState(false);
 
-  const {comment, rating} = review;
+  const { comment, rating } = review;
   const isSubmitDisabled = comment.length < MIN_REVIEW_LENGTH || rating === 0;
 
   const handleStarClick = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +40,7 @@ function ReviewForm():JSX.Element {
     });
   };
 
-  const handleTextareaChange = (evt: ChangeEvent<HTMLTextAreaElement>) =>  {
+  const handleTextareaChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
     setReview({
       comment: evt.target.value,
       rating,
@@ -71,35 +72,35 @@ function ReviewForm():JSX.Element {
     <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating" >
-        <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" onChange={handleStarClick} checked={review.rating === 5} disabled={disabledForm}/>
+        <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" onChange={handleStarClick} checked={review.rating === 5} disabled={disabledForm} />
         <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
           </svg>
         </label>
 
-        <input className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio" onChange={handleStarClick} checked={review.rating === 4} disabled={disabledForm}/>
+        <input className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio" onChange={handleStarClick} checked={review.rating === 4} disabled={disabledForm} />
         <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
           </svg>
         </label>
 
-        <input className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" onChange={handleStarClick} checked={review.rating === 3} disabled={disabledForm}/>
+        <input className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" onChange={handleStarClick} checked={review.rating === 3} disabled={disabledForm} />
         <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
           </svg>
         </label>
 
-        <input className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" onChange={handleStarClick} checked={review.rating === 2} disabled={disabledForm}/>
+        <input className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" onChange={handleStarClick} checked={review.rating === 2} disabled={disabledForm} />
         <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
           </svg>
         </label>
 
-        <input className="form__rating-input visually-hidden" name="rating" value="1" id="1-star" type="radio" onChange={handleStarClick} checked={review.rating === 1} disabled={disabledForm}/>
+        <input className="form__rating-input visually-hidden" name="rating" value="1" id="1-star" type="radio" onChange={handleStarClick} checked={review.rating === 1} disabled={disabledForm} />
         <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
